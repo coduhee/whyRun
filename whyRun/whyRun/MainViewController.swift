@@ -17,7 +17,7 @@ class MainViewController: UIViewController {
         
         setupBackGround()
         setupButton()
-        setupConstraint()
+        setupButtonConstraint()
     }
     
     func setupBackGround() {
@@ -37,18 +37,19 @@ class MainViewController: UIViewController {
     }
     
     func setupButton() {
-        showSheetButton.setTitle("📍", for: .normal)
-        showSheetButton.titleLabel?.font = .systemFont(ofSize: 60, weight: .thin)
+        showSheetButton.setImage(UIImage(named: "YSpointer"), for: .normal)
         showSheetButton.addTarget(self, action: #selector(tapShowButton), for: .touchUpInside)
     }
     
-    func setupConstraint() {
+    func setupButtonConstraint() {
         view.addSubview(showSheetButton)
         showSheetButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
+            showSheetButton.widthAnchor.constraint(equalToConstant: 50),
+            showSheetButton.heightAnchor.constraint(equalToConstant: 50),
             showSheetButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            showSheetButton.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            showSheetButton.topAnchor.constraint(equalTo: view.topAnchor, constant: view.bounds.height * 0.19)
         ])
     }
     
