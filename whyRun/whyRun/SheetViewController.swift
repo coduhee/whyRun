@@ -12,20 +12,28 @@ class SheetViewController: UIViewController {
     let placeLabel = UILabel()
     let timeLabel = UILabel()
     
+    let labelStackView = UIStackView()
+    
     let button1 = UIButton()
     let button2 = UIButton()
     let button3 = UIButton()
     let button4 = UIButton()
     let button5 = UIButton()
     
-    let labelStackView = UIStackView()
-    
     let buttonStackView = UIStackView()
     let buttonScrollView = UIScrollView()
     let buttonContentView = UIView()
     
-    let textView = UITextView()
-
+    let firstDetailLabel = UILabel()
+    let secondDetailLabel = UILabel()
+    let thirdDetailLabel = UILabel()
+    
+    let firstTextLabel = UILabel()
+    let secondTextLabel = UILabel()
+    let thirdTextLabel = UILabel()
+    
+    let textStackView = UIStackView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -37,8 +45,9 @@ class SheetViewController: UIViewController {
         configureScrollView()
         configureButtonStackView()
         
+        setupTextLabel()
         setupTextView()
-        configureTextView()
+        configureTextStackView()
     }
     
     func setupLabels() {
@@ -54,7 +63,7 @@ class SheetViewController: UIViewController {
         
         timeLabel.text = "영업중 AM 09:00 ~ PM 09:00"
         timeLabel.textColor = .systemGreen
-        timeLabel.font = .systemFont(ofSize: 15, weight: .light)
+        timeLabel.font = .systemFont(ofSize: 15, weight: .medium)
     }
     
     func configureLabelStackView() {
@@ -68,7 +77,6 @@ class SheetViewController: UIViewController {
         labelStackView.addArrangedSubview(timeLabel)
         
         view.addSubview(labelStackView)
-        
         labelStackView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
@@ -78,7 +86,7 @@ class SheetViewController: UIViewController {
     }
     
     func setupButton() {
-        shapeButton(title: "커리어 탐색", systemImage: "location.circle", myButton: button1)
+        shapeButton(title: "iOS 공부", systemImage: "location.circle", myButton: button1)
         shapeButton(title: "멘토링", systemImage: "person.fill.questionmark", myButton: button2)
         shapeButton(title: "TIL 작성", systemImage: "pencil.line", myButton: button3)
         shapeButton(title: "출석 체크", systemImage: "checkmark.seal", myButton: button4)
@@ -145,22 +153,52 @@ class SheetViewController: UIViewController {
         myButton.configuration = config
     }
     
-    func configureTextView() {
-        view.addSubview(textView)
-        textView.translatesAutoresizingMaskIntoConstraints = false
+    func setupTextLabel() {
+        firstTextLabel.text = "🎭 MBTI"
+        firstTextLabel.font = .systemFont(ofSize: 20, weight: .bold)
         
-        NSLayoutConstraint.activate([
-            textView.topAnchor.constraint(equalTo: buttonScrollView.bottomAnchor, constant: 5),
-            textView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
-            textView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 30),
-            textView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30)
-        ])
+        secondTextLabel.text = "🏆 나의 장점"
+        secondTextLabel.font = .systemFont(ofSize: 20, weight: .bold)
+        
+        thirdTextLabel.text = "🤝 협업 스타일"
+        thirdTextLabel.font = .systemFont(ofSize: 20, weight: .bold)
     }
     
     func setupTextView() {
-        textView.text = "1. 나에 대한 설명 & MBTI:\n 저는 INTP입니다. \n 흥미 있는 일에는 미친 듯이 몰입하는 타입이에요. 대신 루틴을 꾸준히 유지하는 건 살짝 어려운 편이지만, 집중할 땐 진짜 결과물이 잘 나옵니다. \n 2. 객관적으로 본 내 장점:\n 저는 새로운 걸 빨리 배우고 잘 응용한다고 생각합니다. 막판 몰입형이지만 결과는 확실하게 만드는 편이에요. \n 3. 내 협업 스타일:\n 저는 저의 팔로우쉽을 강조하고 싶습니다! 서로 편하게 지내는 게 좋다고 생각해서 보고사항이 있다면 빠르게 말하고 맡은 부분은 확실하게 책임집니다."
-        textView.font = .systemFont(ofSize: 25)
-        textView.isEditable = false
+        firstDetailLabel.text = "저는 INTP입니다. \n흥미 있는 일에 완전히 몰입하는 편이에요. \n대신 루틴을 꾸준히 유지하는 건 살짝 어려운 편이지만, 집중할 땐 진짜 결과물이 잘 나옵니다."
+        firstDetailLabel.font = .systemFont(ofSize: 18)
+        firstDetailLabel.numberOfLines = 0
+        
+        
+        secondDetailLabel.text = "저는 새로운 걸 빨리 배우고 잘 응용한다고 생각합니다.\n새로운 걸 배우면 바로 써보고 싶어서 기대가 돼요."
+        secondDetailLabel.font = .systemFont(ofSize: 18)
+        secondDetailLabel.numberOfLines = 0
+        
+        thirdDetailLabel.text = "모두가 리더쉽을 외칠때 저는 저의 팔로우쉽을 강조하고 싶습니다!\n서로 편하게 지내는 게 좋다고 생각해서 보고사항이 있다면 빠르게 말하고, 맡은 부분은 확실하게 책임집니다."
+        thirdDetailLabel.font = .systemFont(ofSize: 18)
+        thirdDetailLabel.numberOfLines = 0
+    }
+    
+    func configureTextStackView() {
+        textStackView.axis = .vertical
+        textStackView.spacing = 5
+        textStackView.alignment = .leading
+        
+        textStackView.addArrangedSubview(firstTextLabel)
+        textStackView.addArrangedSubview(firstDetailLabel)
+        textStackView.addArrangedSubview(secondTextLabel)
+        textStackView.addArrangedSubview(secondDetailLabel)
+        textStackView.addArrangedSubview(thirdTextLabel)
+        textStackView.addArrangedSubview(thirdDetailLabel)
+        
+        view.addSubview(textStackView)
+        textStackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            textStackView.topAnchor.constraint(equalTo: buttonScrollView.bottomAnchor, constant: 10),
+            textStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            textStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30)
+        ])
     }
 }
 
