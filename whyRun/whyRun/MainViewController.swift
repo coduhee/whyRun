@@ -7,7 +7,6 @@
 import UIKit
 
 class MainViewController: UIViewController {
-    
     let showSheetButton = UIButton()
     let backgroundImageView = UIImageView()
     
@@ -17,7 +16,7 @@ class MainViewController: UIViewController {
         
         setupBackGround()
         setupButton()
-        setupButtonConstraint()
+        configureShowSheetButton()
     }
     
     func setupBackGround() {
@@ -41,7 +40,7 @@ class MainViewController: UIViewController {
         showSheetButton.addTarget(self, action: #selector(tapShowButton), for: .touchUpInside)
     }
     
-    func setupButtonConstraint() {
+    func configureShowSheetButton() {
         view.addSubview(showSheetButton)
         showSheetButton.translatesAutoresizingMaskIntoConstraints = false
         
