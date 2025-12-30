@@ -19,9 +19,12 @@ class SheetViewController: UIViewController {
     let button5 = UIButton()
     
     let labelStackView = UIStackView()
+    
     let buttonStackView = UIStackView()
     let buttonScrollView = UIScrollView()
     let buttonContentView = UIView()
+    
+    let textView = UITextView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +36,9 @@ class SheetViewController: UIViewController {
         setupButton()
         configureScrollView()
         configureButtonStackView()
+        
+        setupTextView()
+        configureTextView()
     }
     
     func setupLabels() {
@@ -121,7 +127,7 @@ class SheetViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             buttonStackView.leadingAnchor.constraint(equalTo: buttonContentView.leadingAnchor, constant: 30),
-            buttonStackView.trailingAnchor.constraint(equalTo: buttonContentView.trailingAnchor, constant: 30),
+            buttonStackView.trailingAnchor.constraint(equalTo: buttonContentView.trailingAnchor, constant: -30),
             buttonStackView.topAnchor.constraint(equalTo: buttonContentView.topAnchor),
             buttonStackView.bottomAnchor.constraint(equalTo: buttonContentView.bottomAnchor)
         ])
@@ -137,6 +143,24 @@ class SheetViewController: UIViewController {
         config.cornerStyle = .capsule
         config.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 14, bottom: 10, trailing: 14)
         myButton.configuration = config
+    }
+    
+    func configureTextView() {
+        view.addSubview(textView)
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            textView.topAnchor.constraint(equalTo: buttonScrollView.bottomAnchor, constant: 5),
+            textView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            textView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 30),
+            textView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30)
+        ])
+    }
+    
+    func setupTextView() {
+        textView.text = "1. 나에 대한 설명 & MBTI:\n 저는 INTP입니다. \n 흥미 있는 일에는 미친 듯이 몰입하는 타입이에요. 대신 루틴을 꾸준히 유지하는 건 살짝 어려운 편이지만, 집중할 땐 진짜 결과물이 잘 나옵니다. \n 2. 객관적으로 본 내 장점:\n 저는 새로운 걸 빨리 배우고 잘 응용한다고 생각합니다. 막판 몰입형이지만 결과는 확실하게 만드는 편이에요. \n 3. 내 협업 스타일:\n 저는 저의 팔로우쉽을 강조하고 싶습니다! 서로 편하게 지내는 게 좋다고 생각해서 보고사항이 있다면 빠르게 말하고 맡은 부분은 확실하게 책임집니다."
+        textView.font = .systemFont(ofSize: 25)
+        textView.isEditable = false
     }
 }
 
