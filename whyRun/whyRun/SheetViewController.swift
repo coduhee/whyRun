@@ -11,6 +11,7 @@ class SheetViewController: UIViewController {
     let starLabel = UILabel()
     let placeLabel = UILabel()
     let timeLabel = UILabel()
+    
     let button1 = UIButton()
     let button2 = UIButton()
     let button3 = UIButton()
@@ -20,7 +21,7 @@ class SheetViewController: UIViewController {
     let labelStackView = UIStackView()
     let buttonStackView = UIStackView()
     let buttonScrollView = UIScrollView()
-    let scrollContentView = UIView()
+    let buttonContentView = UIView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +29,10 @@ class SheetViewController: UIViewController {
         
         setupLabels()
         configureLabelStackView()
-        configureSheetView()
+        
+        setupButton()
+        configureScrollView()
+        configureButtonStackView()
     }
     
     func setupLabels() {
@@ -56,10 +60,9 @@ class SheetViewController: UIViewController {
         labelStackView.addArrangedSubview(starLabel)
         labelStackView.addArrangedSubview(placeLabel)
         labelStackView.addArrangedSubview(timeLabel)
-    }
-    
-    func configureSheetView() {
+        
         view.addSubview(labelStackView)
+        
         labelStackView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
@@ -69,25 +72,11 @@ class SheetViewController: UIViewController {
     }
     
     func setupButton() {
-        button1.setTitle("커리어 탐색", for: .normal)
-        button1.setImage(UIImage(systemName: "location.circle"), for: .normal)
-        button1.semanticContentAttribute = .forceRightToLeft
-        
-        button2.setTitle("멘토링", for: .normal)
-        button2.setImage(UIImage(systemName: "person.fill.questionmark"), for: .normal)
-        button2.semanticContentAttribute = .forceRightToLeft
-        
-        button3.setTitle("TIL 작성", for: .normal)
-        button3.setImage(UIImage(systemName: "highlight"), for: .normal)
-        button3.semanticContentAttribute = .forceRightToLeft
-        
-        button4.setTitle("출석 체크", for: .normal)
-        button4.setImage(UIImage(systemName: "checkmark.seal"), for: .normal)
-        button4.semanticContentAttribute = .forceRightToLeft
-        
-        button5.setTitle("데일리 스크럼", for: .normal)
-        button5.setImage(UIImage(systemName: "clock.badge.checkmark"), for: .normal)
-        button5.semanticContentAttribute = .forceRightToLeft
+        shapeButton(title: "커리어 탐색", systemImage: "location.circle", myButton: button1)
+        shapeButton(title: "멘토링", systemImage: "person.fill.questionmark", myButton: button2)
+        shapeButton(title: "TIL 작성", systemImage: "pencil.line", myButton: button3)
+        shapeButton(title: "출석 체크", systemImage: "checkmark.seal", myButton: button4)
+        shapeButton(title: "데일리 스크럼", systemImage: "clock.badge.checkmark", myButton: button5)
     }
     
     func configureScrollView() {
@@ -97,25 +86,57 @@ class SheetViewController: UIViewController {
         NSLayoutConstraint.activate([
             buttonScrollView.topAnchor.constraint(equalTo: labelStackView.bottomAnchor),
             buttonScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            buttonScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 20),
+            buttonScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             buttonScrollView.heightAnchor.constraint(equalToConstant: 60)
         ])
         
-        buttonScrollView.addSubview(scrollContentView)
-        scrollContentView.translatesAutoresizingMaskIntoConstraints = false
+        buttonScrollView.addSubview(buttonContentView)
+        buttonContentView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            scrollContentView.topAnchor.constraint(equalTo: buttonScrollView.contentLayoutGuide.topAnchor),
-            scrollContentView.leadingAnchor.constraint(equalTo: buttonScrollView.contentLayoutGuide.leadingAnchor),
-            scrollContentView.trailingAnchor.constraint(equalTo: buttonScrollView.contentLayoutGuide.trailingAnchor),
-            scrollContentView.bottomAnchor.constraint(equalTo: buttonScrollView.contentLayoutGuide.bottomAnchor),
+            buttonContentView.topAnchor.constraint(equalTo: buttonScrollView.contentLayoutGuide.topAnchor),
+            buttonContentView.leadingAnchor.constraint(equalTo: buttonScrollView.contentLayoutGuide.leadingAnchor),
+            buttonContentView.trailingAnchor.constraint(equalTo: buttonScrollView.contentLayoutGuide.trailingAnchor),
+            buttonContentView.bottomAnchor.constraint(equalTo: buttonScrollView.contentLayoutGuide.bottomAnchor),
             
-            scrollContentView.heightAnchor.constraint(equalTo: buttonScrollView.frameLayoutGuide.heightAnchor)
+            buttonContentView.heightAnchor.constraint(equalTo: buttonScrollView.frameLayoutGuide.heightAnchor)
         ])
+        buttonScrollView.showsHorizontalScrollIndicator = false
     }
     
     func configureButtonStackView() {
+        buttonStackView.axis = .horizontal
+        buttonStackView.spacing = 30
+        buttonStackView.alignment = .center
+        buttonStackView.distribution = .fill
+        
+        buttonStackView.addArrangedSubview(button1)
+        buttonStackView.addArrangedSubview(button2)
+        buttonStackView.addArrangedSubview(button3)
+        buttonStackView.addArrangedSubview(button4)
+        buttonStackView.addArrangedSubview(button5)
+        
+        buttonContentView.addSubview(buttonStackView)
+        buttonStackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            buttonStackView.leadingAnchor.constraint(equalTo: buttonContentView.leadingAnchor, constant: 30),
+            buttonStackView.trailingAnchor.constraint(equalTo: buttonContentView.trailingAnchor, constant: 30),
+            buttonStackView.topAnchor.constraint(equalTo: buttonContentView.topAnchor),
+            buttonStackView.bottomAnchor.constraint(equalTo: buttonContentView.bottomAnchor)
+        ])
     }
     
-    
+    func shapeButton(title: String, systemImage: String, myButton: UIButton) {
+        var config = UIButton.Configuration.filled()
+        config.title = title
+        config.image = UIImage(systemName: systemImage)
+        config.imagePlacement = .leading
+        config.imagePadding = 6
+        
+        config.cornerStyle = .capsule
+        config.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 14, bottom: 10, trailing: 14)
+        myButton.configuration = config
+    }
 }
+
