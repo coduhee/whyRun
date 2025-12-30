@@ -59,10 +59,6 @@ class MainViewController: UIViewController {
         if let sheet = sheetViewController.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
             sheet.prefersGrabberVisible = true
-            
-            if #available(iOS 16.0, *) {
-                sheet.selectedDetentIdentifier = .medium
-            }
         }
         present(sheetViewController, animated: true)
     }
