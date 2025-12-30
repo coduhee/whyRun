@@ -91,7 +91,7 @@ class PageHan: UIViewController {
             contentView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
-            
+            contentView.heightAnchor.constraint(equalToConstant: 2000),
             bottomcontentVstackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             bottomcontentVstackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             bottomcontentVstackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
@@ -158,7 +158,7 @@ class PageHan: UIViewController {
         return headLineLabel
     }
     
-    // 메인이미지 세팅함수
+    // 헤드이미지 세팅함수
     func setMainImage()->UIImageView{
         let mainImage = UIImageView()
         mainImage.translatesAutoresizingMaskIntoConstraints = false
@@ -167,23 +167,23 @@ class PageHan: UIViewController {
         // 뷰영역을 넘어간 내용 자르기
         mainImage.clipsToBounds = true
         mainImage.layer.borderColor = UIColor.white.cgColor
-        mainImage.layer.borderWidth = 2
+        mainImage.layer.borderWidth = 1
         NSLayoutConstraint.activate([
-            mainImage.widthAnchor.constraint(equalToConstant: 120),
-            mainImage.heightAnchor.constraint(equalToConstant: 120)
+            mainImage.widthAnchor.constraint(equalToConstant: 150),
+            mainImage.heightAnchor.constraint(equalToConstant: 150)
             ])
         
         mainImage.image = .han
         return mainImage
     }
     
-    
+    // 상세 내용 세팅 함수
     func setBottomContentView()->UIStackView{
         let mainVSteckView = UIStackView()
         mainVSteckView.axis = .vertical
         mainVSteckView.translatesAutoresizingMaskIntoConstraints = false
         mainVSteckView.alignment = .center
-        mainVSteckView.spacing = 40
+        mainVSteckView.spacing = 10
         
         // 내용 헤더 컴포넌트 세팅
         let contentHeaderLabel = UILabel()
@@ -210,13 +210,19 @@ class PageHan: UIViewController {
         let eduAndWorkView = setContentToEduAndWork()
         let skillView = setContentToSkill()
         
-        contentHStackView1.addArrangedSubview(infoView)
         contentHStackView1.addArrangedSubview(eduAndWorkView)
         contentHStackView1.addArrangedSubview(skillView)
 
         
         mainVSteckView.addArrangedSubview(contentHeaderLabel)
+        mainVSteckView.addArrangedSubview(infoView)
         mainVSteckView.addArrangedSubview(contentHStackView1)
+        
+        NSLayoutConstraint.activate([
+            infoView.widthAnchor.constraint(equalTo: mainVSteckView.widthAnchor),
+           // infoView.centerYAnchor.constraint(equalTo: mainVSteckView.centerYAnchor),
+        ])
+        
         return mainVSteckView
     }
     
@@ -226,40 +232,47 @@ class PageHan: UIViewController {
         let infoView = UIView()
         infoView.translatesAutoresizingMaskIntoConstraints = false
         infoView.backgroundColor = .white
+        let infoTotalHStackView = UIStackView()
+        infoTotalHStackView.translatesAutoresizingMaskIntoConstraints = false
+        infoTotalHStackView.axis = .horizontal
+        infoTotalHStackView.spacing = 10
         
-        
-        let infoVStackView = UIStackView()
-        infoVStackView.translatesAutoresizingMaskIntoConstraints = false
-        infoVStackView.axis = .vertical
-        infoVStackView.spacing = 10
-        
-        let infoImageView = CustomImageView(image: .programmer, xSize:100,ySize: 100)
+        // 아이콘 및 이름 배치
+        let infoNameVStackView = UIStackView()
+        infoNameVStackView.translatesAutoresizingMaskIntoConstraints = false
+        infoNameVStackView.axis = .vertical
+        infoNameVStackView.spacing = 0
+        infoNameVStackView.distribution = .equalSpacing
+        let infoImageView = CustomImageView(image: .programmer, xSize:70,ySize: 70)
         let nameLabel = UILabel()
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.numberOfLines = 0
         nameLabel.textAlignment = .center
-        nameLabel.lineBreakMode = .byWordWrapping
+        //nameLabel.lineBreakMode = .byWordWrapping
         nameLabel.attributedText = NSAttributedString(
             string: "HAN\nJU HEON",
             attributes: [
-                .font: UIFont.boldSystemFont(ofSize: 15),
+                .font: UIFont.boldSystemFont(ofSize: 16),
                 .foregroundColor: UIColor(red:107/255,green:121/255,blue:251/255,alpha:1)
             ]
         )
-        NSLayoutConstraint.activate([
-            nameLabel.widthAnchor.constraint(equalToConstant: 200),
-            infoVStackView.widthAnchor.constraint(equalToConstant: 200)
-        ])
+
+        infoNameVStackView.addArrangedSubview(infoImageView)
+        infoNameVStackView.addArrangedSubview(nameLabel)
+
         
+        /// 운용 사이트 배치
         let addressStackView = UIStackView()
         addressStackView.translatesAutoresizingMaskIntoConstraints = false
-        addressStackView.axis = .horizontal
-        
+        addressStackView.axis = .vertical
+        addressStackView.spacing = 10
+        addressStackView.distribution = .fillEqually
+
         let velogStackView = UIStackView()
         velogStackView.translatesAutoresizingMaskIntoConstraints = false
         velogStackView.axis = .horizontal
         let velogimage = CustomImageView(image: .velogIcon, xSize:20,ySize: 20)
-        let velogLabel = CustomLabel(text: "velog.io/@tyr_00",align: .center,attribute: contentAttribute)
+        let velogLabel = CustomLabel(text: "\tvelog.io/@tyr_00",align: .left,attribute: contentAttribute)
         velogStackView.addArrangedSubview(velogimage)
         velogStackView.addArrangedSubview(velogLabel)
 
@@ -267,7 +280,7 @@ class PageHan: UIViewController {
         gitStackView.translatesAutoresizingMaskIntoConstraints = false
         gitStackView.axis = .horizontal
         let gitimage = CustomImageView(image: .githubLogo, xSize:20,ySize: 20)
-        let gitLabel = CustomLabel(text: "godzx3-ctrl",align: .center,attribute: contentAttribute)
+        let gitLabel = CustomLabel(text: "\tgodzx3-ctrl",align: .left,attribute: contentAttribute)
         gitStackView.addArrangedSubview(gitimage)
         gitStackView.addArrangedSubview(gitLabel)
         
@@ -275,28 +288,35 @@ class PageHan: UIViewController {
         emailStackView.translatesAutoresizingMaskIntoConstraints = false
         emailStackView.axis = .horizontal
         let emailImage = CustomImageView(image: .icons8Email96, xSize:20,ySize: 20)
-        let emailLabel = CustomLabel(text: "godzx3@gmail.com",align: .center,attribute: contentAttribute)
+        let emailLabel = CustomLabel(text: "\tgodzx3@gmail.com",align: .left,attribute: contentAttribute)
         emailStackView.addArrangedSubview(emailImage)
         emailStackView.addArrangedSubview(emailLabel)
         
+        addressStackView.addArrangedSubview(velogStackView)
+        addressStackView.addArrangedSubview(gitStackView)
+        addressStackView.addArrangedSubview(emailStackView)
         
-        infoVStackView.addArrangedSubview(infoImageView)
-        infoVStackView.addArrangedSubview(nameLabel)
-        infoVStackView.addArrangedSubview(velogStackView)
-        infoVStackView.addArrangedSubview(gitStackView)
-        infoVStackView.addArrangedSubview(emailStackView)
+        infoTotalHStackView.addArrangedSubview(infoNameVStackView)
+        infoTotalHStackView.addArrangedSubview(addressStackView)
+
         
-        infoVStackView.setCustomSpacing(16, after: nameLabel)
-        infoView.addSubview(infoVStackView)
+//        infoNameVStackView.setCustomSpacing(16, after: nameLabel)
+        infoView.addSubview(infoTotalHStackView)
 
         
         NSLayoutConstraint.activate([
-            infoVStackView.centerXAnchor.constraint(equalTo: infoView.centerXAnchor),
-            infoVStackView.centerYAnchor.constraint(equalTo: infoView.centerYAnchor),
-            infoVStackView.widthAnchor.constraint(equalToConstant: 140),
-            infoView.widthAnchor.constraint(equalToConstant: 150),
-            infoView.heightAnchor.constraint(equalToConstant: 300),
+            //infoNameVStackView.heightAnchor.constraint(equalTo:infoTotalHStackView.heightAnchor),
+            infoNameVStackView.widthAnchor.constraint(equalToConstant:140),
 
+            infoTotalHStackView.centerXAnchor.constraint(equalTo: infoView.centerXAnchor),
+            infoTotalHStackView.centerYAnchor.constraint(equalTo: infoView.centerYAnchor),
+            infoTotalHStackView.widthAnchor.constraint(equalTo: infoView.widthAnchor),
+            infoTotalHStackView.heightAnchor.constraint(equalToConstant: 110),
+
+            infoTotalHStackView.topAnchor.constraint(equalTo:infoTotalHStackView.topAnchor, constant: 15),
+            infoTotalHStackView.bottomAnchor.constraint(equalTo:infoTotalHStackView.bottomAnchor, constant: -15),
+            
+            infoView.heightAnchor.constraint(equalToConstant: 120)
         ])
         
         return infoView
@@ -311,22 +331,18 @@ class PageHan: UIViewController {
         eduWorkVStackView.translatesAutoresizingMaskIntoConstraints = false
         eduWorkVStackView.axis = .vertical
         eduWorkVStackView.spacing = 2
-        let eduLabel = CustomLabel(text: "Education", align: .center, attribute: contentheaderAttribute)
-        let eduContentLabel1 = CustomLabel(text: "# 서일대학교(졸업)", align: .left, attribute: contentAttribute)
-        let eduContentLabel2 = CustomLabel(text: "- 소프트웨어공학과\n- 소프트웨어공학과(학사)", align: .left, attribute: contentAttribute)
+        let eduLabel = CustomLabel(text: "EDUCATION", align: .center, attribute: contentheaderAttribute)
+        let eduContentLabel = CustomLabel(text: "# 서일대학교(졸업)\n- 소프트웨어공학과\n- 소프트웨어공학과(학사)\n", align: .left, attribute: contentAttribute)
         
         let workLabel = CustomLabel(text: "Work", align: .center, attribute: contentheaderAttribute)
-        let workContentLabel1 = CustomLabel(text: "# (주)로딕스", align: .left, attribute: contentAttribute)
-        let workContentLabel2 = CustomLabel(text: "2021.11~2025.10:\n \t연구원, 전임연구원 ", align: .left, attribute: contentAttribute)
+        let workContentLabel = CustomLabel(text: "# (주)로딕스\n2021.11~2025.10:\n \t연구원, 전임연구원 ", align: .left, attribute: contentAttribute)
         
         eduWorkVStackView.addArrangedSubview(eduLabel)
-        eduWorkVStackView.addArrangedSubview(eduContentLabel1)
-        eduWorkVStackView.addArrangedSubview(eduContentLabel2)
+        eduWorkVStackView.addArrangedSubview(eduContentLabel)
         eduWorkVStackView.addArrangedSubview(workLabel)
-        eduWorkVStackView.addArrangedSubview(workContentLabel1)
-        eduWorkVStackView.addArrangedSubview(workContentLabel2)
+        eduWorkVStackView.addArrangedSubview(workContentLabel)
         
-        eduWorkVStackView.setCustomSpacing(40, after: eduContentLabel2)
+        eduWorkVStackView.setCustomSpacing(20, after: eduContentLabel)
         eduWorkVStackView.setCustomSpacing(6, after: workLabel)
 
         
@@ -364,7 +380,7 @@ class PageHan: UIViewController {
         skillVStackView.addArrangedSubview(workscopeLabel1)
         skillView.addSubview(skillVStackView)
         
-        skillVStackView.setCustomSpacing(40, after: skillContentLabel)
+        skillVStackView.setCustomSpacing(20, after: skillContentLabel)
         skillVStackView.setCustomSpacing(6, after: worScopeLabel)
         
         NSLayoutConstraint.activate([
