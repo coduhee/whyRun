@@ -45,8 +45,7 @@ class SheetViewController: UIViewController {
         configureScrollView()
         configureButtonStackView()
         
-        setupTextLabel()
-        setupTextView()
+        setupBobyLabel()
         configureTextStackView()
     }
     
@@ -152,33 +151,7 @@ class SheetViewController: UIViewController {
         config.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 14, bottom: 10, trailing: 14)
         myButton.configuration = config
     }
-    
-    func setupTextLabel() {
-        firstTextLabel.text = "🎭 MBTI"
-        firstTextLabel.font = .systemFont(ofSize: 20, weight: .bold)
         
-        secondTextLabel.text = "🏆 나의 장점"
-        secondTextLabel.font = .systemFont(ofSize: 20, weight: .bold)
-        
-        thirdTextLabel.text = "🤝 협업 스타일"
-        thirdTextLabel.font = .systemFont(ofSize: 20, weight: .bold)
-    }
-    
-    func setupTextView() {
-        firstDetailLabel.text = "저는 INTP입니다. \n흥미 있는 일에 완전히 몰입하는 편이에요. \n대신 루틴을 꾸준히 유지하는 건 살짝 어려운 편이지만, 집중할 땐 진짜 결과물이 잘 나옵니다."
-        firstDetailLabel.font = .systemFont(ofSize: 18)
-        firstDetailLabel.numberOfLines = 0
-        
-        
-        secondDetailLabel.text = "저는 새로운 걸 빨리 배우고 잘 응용한다고 생각합니다.\n새로운 걸 배우면 바로 써보고 싶어서 기대가 돼요."
-        secondDetailLabel.font = .systemFont(ofSize: 18)
-        secondDetailLabel.numberOfLines = 0
-        
-        thirdDetailLabel.text = "모두가 리더쉽을 외칠때 저는 저의 팔로우쉽을 강조하고 싶습니다!\n서로 편하게 지내는 게 좋다고 생각해서 보고사항이 있다면 빠르게 말하고, 맡은 부분은 확실하게 책임집니다."
-        thirdDetailLabel.font = .systemFont(ofSize: 18)
-        thirdDetailLabel.numberOfLines = 0
-    }
-    
     func configureTextStackView() {
         textStackView.axis = .vertical
         textStackView.spacing = 5
@@ -200,5 +173,61 @@ class SheetViewController: UIViewController {
             textStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30)
         ])
     }
+    
+    func setupBobyLabel() {
+        configureLabel(firstTextLabel, text: ProfileStrings.titleMBTI, style: .title)
+        configureLabel(secondTextLabel, text: ProfileStrings.titleStrength, style: .title)
+        configureLabel(thirdTextLabel, text: ProfileStrings.titleCooperation, style: .title)
+
+        configureLabel(firstDetailLabel, text: ProfileStrings.bodyMBTI, style: .detail)
+        configureLabel(secondDetailLabel, text: ProfileStrings.bodyStrength, style: .detail)
+        configureLabel(thirdDetailLabel, text: ProfileStrings.bodyCooperation, style: .detail)
+    }
+    
+    
+    func configureLabel(_ label: UILabel, text: String, style: LabelStyle) {
+        label.text = text
+        
+        switch style {
+            case .title:
+            label.font = .systemFont(ofSize: 20, weight: .bold)
+            
+            case .detail:
+            label.font = .systemFont(ofSize: 18)
+            label.numberOfLines = 0
+        }
+    }
+    
 }
+
+
+enum LabelStyle {
+    case title
+    case detail
+}
+
+enum ProfileStrings {
+    static let titleMBTI = "🎭 MBTI"
+    static let titleStrength = "🏆 나의 장점"
+    static let titleCooperation = "🤝 협업 스타일"
+
+    static let bodyMBTI = """
+저는 INTP입니다.
+흥미 있는 일에 완전히 몰입하는 편이에요.
+대신 루틴을 꾸준히 유지하는 건 살짝 어려운 편이지만,
+집중할 땐 진짜 결과물이 잘 나옵니다.
+"""
+
+    static let bodyStrength = """
+저는 새로운 걸 빨리 배우고 잘 응용한다고 생각합니다.
+새로운 걸 배우면 바로 써보고 싶어서 기대가 돼요.
+"""
+
+    static let bodyCooperation = """
+모두가 리더십을 외칠때 저는 저의 팔로우십을 외치고 싶습니다!
+서로 편하게 지내는 게 좋다고 생각해서 보고사항이 있다면 빠르게 말하고,
+맡은 부분은 확실하게 책임집니다.
+"""
+}
+
 
