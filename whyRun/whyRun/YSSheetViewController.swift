@@ -31,9 +31,9 @@ class YSSheetViewController: UIViewController {
     let secondDetailLabel = UILabel()
     let thirdDetailLabel = UILabel()
     
-    let firstTextLabel = UILabel()
-    let secondTextLabel = UILabel()
-    let thirdTextLabel = UILabel()
+    let firstTitleLabel = UILabel()
+    let secondTitleLabel = UILabel()
+    let thirdTitleLabel = UILabel()
     
     let bodyStackView = UIStackView()
     
@@ -41,18 +41,28 @@ class YSSheetViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         
-        setupLabels()
-        configureLabelStackView()
-        
-        setupButtons()
-        configureScrollView()
-        configureButtonStackView()
-        
-        setupBobyLabels()
-        configureTextStackView()
+        setupHeader()
+        setupButtonScroll()
+        setupProfileSection()
     }
     
-    func setupLabels() {
+    func setupHeader() {
+        setupHeaderLabels()
+        configureHeaderLabelStackView()
+    }
+    
+    func setupButtonScroll() {
+        setupButtons()
+        configureButtonScrollView()
+        configureButtonStackView()
+    }
+    
+    func setupProfileSection() {
+        setupBobyLabels()
+        configureBodyStackView()
+    }
+    
+    func setupHeaderLabels() {
         mainLabel.text = "장예슬(iOS_9기)"
         mainLabel.font = .systemFont(ofSize: 30, weight: .bold)
         
@@ -81,7 +91,7 @@ class YSSheetViewController: UIViewController {
         UIApplication.shared.open(url)
     }
     
-    func configureLabelStackView() {
+    func configureHeaderLabelStackView() {
         headerStackView.axis = .vertical
         headerStackView.spacing = 5
         headerStackView.alignment = .leading
@@ -114,7 +124,7 @@ class YSSheetViewController: UIViewController {
         return button
     }
     
-    func configureScrollView() {
+    func configureButtonScrollView() {
         view.addSubview(buttonScrollView)
         buttonScrollView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -166,16 +176,16 @@ class YSSheetViewController: UIViewController {
         ])
     }
             
-    func configureTextStackView() {
+    func configureBodyStackView() {
         bodyStackView.axis = .vertical
         bodyStackView.spacing = 5
         bodyStackView.alignment = .leading
         
-        bodyStackView.addArrangedSubview(firstTextLabel)
+        bodyStackView.addArrangedSubview(firstTitleLabel)
         bodyStackView.addArrangedSubview(firstDetailLabel)
-        bodyStackView.addArrangedSubview(secondTextLabel)
+        bodyStackView.addArrangedSubview(secondTitleLabel)
         bodyStackView.addArrangedSubview(secondDetailLabel)
-        bodyStackView.addArrangedSubview(thirdTextLabel)
+        bodyStackView.addArrangedSubview(thirdTitleLabel)
         bodyStackView.addArrangedSubview(thirdDetailLabel)
         
         view.addSubview(bodyStackView)
@@ -189,15 +199,14 @@ class YSSheetViewController: UIViewController {
     }
     
     func setupBobyLabels() {
-        configureLabel(firstTextLabel, text: ProfileStrings.titleMBTI, style: .title)
-        configureLabel(secondTextLabel, text: ProfileStrings.titleStrength, style: .title)
-        configureLabel(thirdTextLabel, text: ProfileStrings.titleCooperation, style: .title)
+        configureLabel(firstTitleLabel, text: ProfileStrings.titleMBTI, style: .title)
+        configureLabel(secondTitleLabel, text: ProfileStrings.titleStrength, style: .title)
+        configureLabel(thirdTitleLabel, text: ProfileStrings.titleCooperation, style: .title)
 
         configureLabel(firstDetailLabel, text: ProfileStrings.bodyMBTI, style: .detail)
         configureLabel(secondDetailLabel, text: ProfileStrings.bodyStrength, style: .detail)
         configureLabel(thirdDetailLabel, text: ProfileStrings.bodyCooperation, style: .detail)
     }
-    
     
     func configureLabel(_ label: UILabel, text: String, style: LabelStyle) {
         label.text = text
