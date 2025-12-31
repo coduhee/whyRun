@@ -26,7 +26,7 @@ class YerinViewController: UIViewController {
     let keywords = ["성실함", "친구들의 상담사", "취미부자"]
     let styles = ["팔로워", "경청", "호기심"]
     let words = "iOS 개발자로 먹고 살 수 있는 날까지 화이팅!!"
-   
+
     //MARK: viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -212,7 +212,6 @@ extension YerinViewController {
         let url = URL(string: "https://velog.io/@bambu113/posts")
         let blogSafariView: SFSafariViewController = SFSafariViewController(url: url!)
         self.present(blogSafariView, animated: true , completion: nil)
-        print("petButton pushed")
     }
     
     // 펫 버튼 액션
