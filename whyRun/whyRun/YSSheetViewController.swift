@@ -15,11 +15,13 @@ class YSSheetViewController: UIViewController {
     
     let labelStackView = UIStackView()
     
-    let button1 = UIButton()
-    let button2 = UIButton()
-    let button3 = UIButton()
-    let button4 = UIButton()
-    let button5 = UIButton()
+    let actionButtonItems: [ActionButtonItem] = [
+        .init(title: "iOS 공부", systemImage: "location.circle"),
+        .init(title: "멘토링", systemImage: "person.fill.questionmark"),
+        .init(title: "TIL 작성", systemImage: "pencil.line"),
+        .init(title: "출석 체크", systemImage: "checkmark.seal"),
+        .init(title: "데일리 스크럼", systemImage: "clock.badge.checkmark")
+    ]
     
     let buttonStackView = UIStackView()
     let buttonScrollView = UIScrollView()
@@ -42,7 +44,7 @@ class YSSheetViewController: UIViewController {
         setupLabels()
         configureLabelStackView()
         
-        setupButton()
+        setupButtons()
         configureScrollView()
         configureButtonStackView()
         
@@ -98,13 +100,18 @@ class YSSheetViewController: UIViewController {
             labelStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
         ])
     }
-    
-    func setupButton() {
-        shapeButton(title: "iOS 공부", systemImage: "location.circle", myButton: button1)
-        shapeButton(title: "멘토링", systemImage: "person.fill.questionmark", myButton: button2)
-        shapeButton(title: "TIL 작성", systemImage: "pencil.line", myButton: button3)
-        shapeButton(title: "출석 체크", systemImage: "checkmark.seal", myButton: button4)
-        shapeButton(title: "데일리 스크럼", systemImage: "clock.badge.checkmark", myButton: button5)
+        
+    func makeButtons(title: String, systemImage: String) -> UIButton {
+        var config = UIButton.Configuration.filled()
+        config.title = title
+        config.image = UIImage(systemName: systemImage)
+        config.imagePlacement = .leading
+        config.imagePadding = 6
+        config.cornerStyle = .capsule
+        config.contentInsets = .init(top: 10, leading: 14, bottom: 10, trailing: 14)
+        
+        let button = UIButton(configuration: config)
+        return button
     }
     
     func configureScrollView() {
@@ -132,17 +139,22 @@ class YSSheetViewController: UIViewController {
         buttonScrollView.showsHorizontalScrollIndicator = false
     }
     
+    func setupButtons() {
+        actionButtonItems.enumerated().forEach { index, item in
+            let button = makeButtons(
+                title: item.title,
+                systemImage: item.systemImage)
+            
+            button.tag = index
+            buttonStackView.addArrangedSubview(button)
+        }
+    }
+    
     func configureButtonStackView() {
         buttonStackView.axis = .horizontal
         buttonStackView.spacing = 30
         buttonStackView.alignment = .center
         buttonStackView.distribution = .fill
-        
-        buttonStackView.addArrangedSubview(button1)
-        buttonStackView.addArrangedSubview(button2)
-        buttonStackView.addArrangedSubview(button3)
-        buttonStackView.addArrangedSubview(button4)
-        buttonStackView.addArrangedSubview(button5)
         
         buttonContentView.addSubview(buttonStackView)
         buttonStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -154,19 +166,7 @@ class YSSheetViewController: UIViewController {
             buttonStackView.bottomAnchor.constraint(equalTo: buttonContentView.bottomAnchor)
         ])
     }
-    
-    func shapeButton(title: String, systemImage: String, myButton: UIButton) {
-        var config = UIButton.Configuration.filled()
-        config.title = title
-        config.image = UIImage(systemName: systemImage)
-        config.imagePlacement = .leading
-        config.imagePadding = 6
-        
-        config.cornerStyle = .capsule
-        config.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 14, bottom: 10, trailing: 14)
-        myButton.configuration = config
-    }
-        
+            
     func configureTextStackView() {
         textStackView.axis = .vertical
         textStackView.spacing = 5
@@ -242,6 +242,11 @@ enum ProfileStrings {
 서로 편하게 지내는 게 좋다고 생각해서 보고사항이 있다면 빠르게 말하고,
 맡은 부분은 확실하게 책임집니다.
 """
+}
+
+struct ActionButtonItem {
+    let title: String
+    let systemImage: String
 }
 
 
