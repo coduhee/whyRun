@@ -86,3 +86,6 @@ fastlane/test_output
 iOSInjectionProject/
 
 # End of https://www.toptal.com/developers/gitignore/api/swift
+whyRun/whyRun.xcodeproj/project.xcworkspace/xcuserdata/gimjuhui.xcuserdatad/UserInterfaceState.xcuserstate
+whyRun/.DS_Store
+whyRun/whyRun/.DS_Store
