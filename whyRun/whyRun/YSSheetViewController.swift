@@ -11,6 +11,7 @@ class YSSheetViewController: UIViewController {
     let starLabel = UILabel()
     let placeLabel = UILabel()
     let timeLabel = UILabel()
+    let emailLabel = UILabel()
     
     let labelStackView = UIStackView()
     
@@ -63,6 +64,19 @@ class YSSheetViewController: UIViewController {
         timeLabel.text = "영업중 AM 09:00 ~ PM 09:00"
         timeLabel.textColor = .systemGreen
         timeLabel.font = .systemFont(ofSize: 15, weight: .medium)
+        
+        emailLabel.text = "↘︎ velog 방문하기"
+        emailLabel.textColor = .systemBlue
+        emailLabel.font = .systemFont(ofSize: 15, weight: .medium)
+        emailLabel.isUserInteractionEnabled = true
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapEmailLabel))
+        emailLabel.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc func tapEmailLabel() {
+        guard let url = URL(string: "https://velog.io/@yyssjj9999/posts") else { return }
+        UIApplication.shared.open(url)
     }
     
     func configureLabelStackView() {
@@ -73,6 +87,7 @@ class YSSheetViewController: UIViewController {
         labelStackView.addArrangedSubview(mainLabel)
         labelStackView.addArrangedSubview(starLabel)
         labelStackView.addArrangedSubview(placeLabel)
+        labelStackView.addArrangedSubview(emailLabel)
         labelStackView.addArrangedSubview(timeLabel)
         
         view.addSubview(labelStackView)
