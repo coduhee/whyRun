@@ -6,7 +6,7 @@
 //
 import UIKit
 
-class MainViewController: UIViewController {
+class YSMainViewController: UIViewController {
     let showSheetButton = UIButton()
     let backgroundImageView = UIImageView()
     
@@ -53,7 +53,7 @@ class MainViewController: UIViewController {
     }
     
     @objc func tapShowButton() {
-        let sheetViewController = SheetViewController()
+        let sheetViewController = YSSheetViewController()
         sheetViewController.modalPresentationStyle = .pageSheet
         
         if let sheet = sheetViewController.sheetPresentationController {

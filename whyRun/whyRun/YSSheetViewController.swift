@@ -6,7 +6,7 @@
 //
 import UIKit
 
-class SheetViewController: UIViewController {
+class YSSheetViewController: UIViewController {
     let mainLabel = UILabel()
     let starLabel = UILabel()
     let placeLabel = UILabel()
@@ -199,7 +199,6 @@ class SheetViewController: UIViewController {
     }
     
 }
-
 
 enum LabelStyle {
     case title
