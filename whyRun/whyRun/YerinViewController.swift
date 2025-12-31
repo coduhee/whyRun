@@ -9,7 +9,7 @@ import UIKit
 import SafariServices
 
 class YerinViewController: UIViewController {
-    // 속성 선언
+    //MARK: 속성 선언
     let profileImage = UIImageView(image: .yerinProfile)
     let petImage = UIImageView(image: .yerinPet)
     
@@ -80,22 +80,25 @@ class YerinViewController: UIViewController {
     // 특징 레이블 stackView
     let characteristics: UIStackView = {
         let keywords = UIStackView(arrangedSubviews: ["성실함", "친구들의 상담사", "취미부자"].map{ PillView($0) })
-        let goals = UIStackView(arrangedSubviews: ["iOS 개발자", "취업", "자취"].map{ PillView($0) })
+        let styles = UIStackView(arrangedSubviews: ["팔로워", "경청", "호기심"].map{ PillView($0) })
         
         keywords.spacing = 5
-        goals.spacing = 5
+        styles.spacing = 5
         
-        let stackView = UIStackView(arrangedSubviews: [
-            MyLabel("나의 키워드", size: 20, weight: .bold),
-            keywords,
-            MyLabel("나의 목표", size: 20, weight: .bold),
-            goals,
-            MyLabel("한 줄 메시지", size: 20, weight: .bold),
-            MyLabel("코드가 왜 되는지 알게되는 그날까지 화이팅!", size: 18, weight: .medium)
-        ])
+        let first = UIStackView(arrangedSubviews: [MyLabel("나의 키워드", size: 22, weight: .bold), keywords])
+        let second = UIStackView(arrangedSubviews: [MyLabel("나의 스타일", size: 22, weight: .bold), styles])
+        let third = UIStackView(arrangedSubviews: [MyLabel("나의 한마디", size: 22, weight: .bold), MyLabel("iOS 개발자로 먹고 살 수 있는 날까지 화이팅!!", size: 18, weight: .semibold)])
+        
+        [first, second, third].forEach {
+            $0.axis = .vertical
+            $0.spacing = 6
+            $0.alignment = .trailing
+        }
+        
+        let stackView = UIStackView(arrangedSubviews: [first, second, third])
         
         stackView.axis = .vertical
-        stackView.spacing = 10
+        stackView.spacing = 20
         stackView.alignment = .trailing
         
         return stackView
@@ -107,15 +110,28 @@ class YerinViewController: UIViewController {
         view.layer.cornerRadius = 10
         return view
     }()
-    
+   
+    //MARK: viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setUI()
+        view.backgroundColor = UIColor(red: 0.19, green: 0.22, blue: 0.32, alpha: 1.00) // HEX #303952
+        setUI() // 기초 UI 설정
+        
+        setButtonActions() // 버튼 액션 설정
     }
     
-    //MARK: UI 셋업
+    //MARK: UI 설정
+    
+    // 프로필 이미지 크기 변경
+    override func viewDidLayoutSubviews() {
+        profileImage.contentMode = .scaleAspectFit
+        profileImage.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+    }
+    
+    // 기초 UI 셋업
     func setUI() {
+        // 여백을 위한 레이아웃 가이드 설정
         let cutGuide = UILayoutGuide()
         view.addLayoutGuide(cutGuide)
         
@@ -133,15 +149,11 @@ class YerinViewController: UIViewController {
             insetGuide.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
         ])
         
-        view.backgroundColor = UIColor(red: 0.19, green: 0.22, blue: 0.32, alpha: 1.00) // HEX #303952
-        
+        // 오토레이아웃 설정
         view.addSubview(profileImage)
         view.addSubview(labelSet)
-//        view.addSubview(buttonSet)
         view.addSubview(characterBackgroundView)
         view.addSubview(ButtonSetBackgroundView)
-
-        profileImage.contentMode = .scaleAspectFit
         
         profileImage.translatesAutoresizingMaskIntoConstraints = false
         labelSet.translatesAutoresizingMaskIntoConstraints = false
@@ -165,9 +177,8 @@ class YerinViewController: UIViewController {
             characterBackgroundView.bottomAnchor.constraint(equalTo: labelSet.topAnchor, constant: -20),
             ])
         
+        // 하위 뷰 설정
         setCharacteristics()
-        
-        blogButton.addTarget(self, action: #selector(blogButtonPushed), for: .touchUpInside)
     }
     
     func setCharacteristics() {
@@ -180,11 +191,15 @@ class YerinViewController: UIViewController {
         ])
     }
     
-    override func viewDidLayoutSubviews() {
-        profileImage.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+
+    
+    //MARK: 버튼 기능 구현
+    func setButtonActions() {
+        blogButton.addTarget(self, action: #selector(blogButtonPushed), for: .touchUpInside)
+        petButton.addTarget(self, action: #selector(petButtonPushed), for: .touchUpInside)
     }
     
-    // 버튼 기능
+    // 블로그 버튼 액션
     @objc func blogButtonPushed() {
         let url = URL(string: "https://velog.io/@bambu113/posts")
         let blogSafariView: SFSafariViewController = SFSafariViewController(url: url!)
@@ -192,9 +207,20 @@ class YerinViewController: UIViewController {
         print("petButton pushed")
     }
     
+    // 펫 버튼 액션
+    @objc func petButtonPushed() {
+        let alert = UIAlertController(title: "펫: 짜코", message: "제가 기르는 도마뱀 짜코입니다.", preferredStyle: .alert)
+        let close = UIAlertAction(title: "닫기", style: .default, handler: nil)
+        
+        alert.addAction(close)
+        present(alert, animated: true, completion: nil)
+    }
+    
 }
 
 //MARK: 커스텀 객체
+
+// 레이블
 class MyLabel: UILabel {
     init(_ text: String, size: CGFloat, weight: UIFont.Weight, color: UIColor = .white) {
         super.init(frame: .zero)
@@ -210,6 +236,7 @@ class MyLabel: UILabel {
     }
 }
 
+// 아이콘 버튼
 class IconButton: UIButton {
     init(icon: UIImage) {
         super.init(frame: .zero)
@@ -243,6 +270,7 @@ class IconButton: UIButton {
     }
 }
 
+// 캡슐 모양 뷰
 class PillView: UIView {
     init(_ text: String) {
         super.init(frame: .zero)
