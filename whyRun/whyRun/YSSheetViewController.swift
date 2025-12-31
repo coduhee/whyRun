@@ -13,9 +13,9 @@ class YSSheetViewController: UIViewController {
     let timeLabel = UILabel()
     let emailLabel = UILabel()
     
-    let labelStackView = UIStackView()
+    let headerStackView = UIStackView()
     
-    let actionButtonItems: [ActionButtonItem] = [
+    let myButtonItems: [ButtonItem] = [
         .init(title: "iOS 공부", systemImage: "location.circle"),
         .init(title: "멘토링", systemImage: "person.fill.questionmark"),
         .init(title: "TIL 작성", systemImage: "pencil.line"),
@@ -35,7 +35,7 @@ class YSSheetViewController: UIViewController {
     let secondTextLabel = UILabel()
     let thirdTextLabel = UILabel()
     
-    let textStackView = UIStackView()
+    let bodyStackView = UIStackView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,7 +48,7 @@ class YSSheetViewController: UIViewController {
         configureScrollView()
         configureButtonStackView()
         
-        setupBobyLabel()
+        setupBobyLabels()
         configureTextStackView()
     }
     
@@ -82,22 +82,22 @@ class YSSheetViewController: UIViewController {
     }
     
     func configureLabelStackView() {
-        labelStackView.axis = .vertical
-        labelStackView.spacing = 5
-        labelStackView.alignment = .leading
+        headerStackView.axis = .vertical
+        headerStackView.spacing = 5
+        headerStackView.alignment = .leading
         
-        labelStackView.addArrangedSubview(mainLabel)
-        labelStackView.addArrangedSubview(starLabel)
-        labelStackView.addArrangedSubview(placeLabel)
-        labelStackView.addArrangedSubview(emailLabel)
-        labelStackView.addArrangedSubview(timeLabel)
+        headerStackView.addArrangedSubview(mainLabel)
+        headerStackView.addArrangedSubview(starLabel)
+        headerStackView.addArrangedSubview(placeLabel)
+        headerStackView.addArrangedSubview(emailLabel)
+        headerStackView.addArrangedSubview(timeLabel)
         
-        view.addSubview(labelStackView)
-        labelStackView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(headerStackView)
+        headerStackView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            labelStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
-            labelStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            headerStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
+            headerStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
         ])
     }
         
@@ -119,7 +119,7 @@ class YSSheetViewController: UIViewController {
         buttonScrollView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            buttonScrollView.topAnchor.constraint(equalTo: labelStackView.bottomAnchor),
+            buttonScrollView.topAnchor.constraint(equalTo: headerStackView.bottomAnchor, constant: 5),
             buttonScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             buttonScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             buttonScrollView.heightAnchor.constraint(equalToConstant: 60)
@@ -140,12 +140,11 @@ class YSSheetViewController: UIViewController {
     }
     
     func setupButtons() {
-        actionButtonItems.enumerated().forEach { index, item in
+        myButtonItems.enumerated().forEach { index, item in
             let button = makeButtons(
                 title: item.title,
                 systemImage: item.systemImage)
             
-            button.tag = index
             buttonStackView.addArrangedSubview(button)
         }
     }
@@ -168,28 +167,28 @@ class YSSheetViewController: UIViewController {
     }
             
     func configureTextStackView() {
-        textStackView.axis = .vertical
-        textStackView.spacing = 5
-        textStackView.alignment = .leading
+        bodyStackView.axis = .vertical
+        bodyStackView.spacing = 5
+        bodyStackView.alignment = .leading
         
-        textStackView.addArrangedSubview(firstTextLabel)
-        textStackView.addArrangedSubview(firstDetailLabel)
-        textStackView.addArrangedSubview(secondTextLabel)
-        textStackView.addArrangedSubview(secondDetailLabel)
-        textStackView.addArrangedSubview(thirdTextLabel)
-        textStackView.addArrangedSubview(thirdDetailLabel)
+        bodyStackView.addArrangedSubview(firstTextLabel)
+        bodyStackView.addArrangedSubview(firstDetailLabel)
+        bodyStackView.addArrangedSubview(secondTextLabel)
+        bodyStackView.addArrangedSubview(secondDetailLabel)
+        bodyStackView.addArrangedSubview(thirdTextLabel)
+        bodyStackView.addArrangedSubview(thirdDetailLabel)
         
-        view.addSubview(textStackView)
-        textStackView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(bodyStackView)
+        bodyStackView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            textStackView.topAnchor.constraint(equalTo: buttonScrollView.bottomAnchor, constant: 10),
-            textStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
-            textStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30)
+            bodyStackView.topAnchor.constraint(equalTo: buttonScrollView.bottomAnchor, constant: 10),
+            bodyStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            bodyStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30)
         ])
     }
     
-    func setupBobyLabel() {
+    func setupBobyLabels() {
         configureLabel(firstTextLabel, text: ProfileStrings.titleMBTI, style: .title)
         configureLabel(secondTextLabel, text: ProfileStrings.titleStrength, style: .title)
         configureLabel(thirdTextLabel, text: ProfileStrings.titleCooperation, style: .title)
@@ -244,7 +243,7 @@ enum ProfileStrings {
 """
 }
 
-struct ActionButtonItem {
+struct ButtonItem {
     let title: String
     let systemImage: String
 }
