@@ -5,7 +5,7 @@
 //  Created by Yeseul Jang on 12/30/25.
 //
 import UIKit
-
+ 
 class YSSheetViewController: UIViewController {
     let mainLabel = UILabel()
     let starLabel = UILabel()
@@ -73,8 +73,8 @@ class YSSheetViewController: UIViewController {
         placeLabel.text = "📍내일배움캠프"
         placeLabel.font = .systemFont(ofSize: 15, weight: .light)
         
-        timeLabel.text = "영업중 AM 09:00 ~ PM 09:00"
-        timeLabel.textColor = .systemGreen
+        timeLabel.text = "⏰ 영업중 AM 09:00 ~ PM 09:00"
+        timeLabel.textColor = .gray
         timeLabel.font = .systemFont(ofSize: 15, weight: .medium)
         
         emailLabel.text = "↘︎ velog 방문하기"
@@ -175,11 +175,26 @@ class YSSheetViewController: UIViewController {
             buttonStackView.bottomAnchor.constraint(equalTo: buttonContentView.bottomAnchor)
         ])
     }
-            
+    
+    func makeSeparatorLine() -> UIView {
+        let view = UIView()
+        view.backgroundColor = .systemGray3
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            view.heightAnchor.constraint(equalToConstant: 1)
+        ])
+        
+        return view
+    }
+
     func configureBodyStackView() {
+        let separatorView = makeSeparatorLine()
+        
         bodyStackView.axis = .vertical
         bodyStackView.spacing = 5
         bodyStackView.alignment = .leading
+        bodyStackView.distribution = .fillProportionally
         
         bodyStackView.addArrangedSubview(firstTitleLabel)
         bodyStackView.addArrangedSubview(firstDetailLabel)
@@ -188,11 +203,16 @@ class YSSheetViewController: UIViewController {
         bodyStackView.addArrangedSubview(thirdTitleLabel)
         bodyStackView.addArrangedSubview(thirdDetailLabel)
         
+        view.addSubview(separatorView)
         view.addSubview(bodyStackView)
         bodyStackView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            bodyStackView.topAnchor.constraint(equalTo: buttonScrollView.bottomAnchor, constant: 10),
+            separatorView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            separatorView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            separatorView.topAnchor.constraint(equalTo: buttonScrollView.bottomAnchor, constant: 10),
+            
+            bodyStackView.topAnchor.constraint(equalTo: separatorView.bottomAnchor, constant: 10),
             bodyStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
             bodyStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30)
         ])
