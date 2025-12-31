@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SafariServices
 
 class YerinViewController: UIViewController {
     // 속성 선언
@@ -35,13 +36,45 @@ class YerinViewController: UIViewController {
 
     // 버튼 stackView
     let petButton = IconButton(icon: .yerinPetIcon)
+    let petLabel = MyLabel("펫: 짜코", size: 15, weight: .semibold, color: UIColor(red: 0.97, green: 0.84, blue: 0.58, alpha: 1.00))
     let blogButton = IconButton(icon: .yerinBlogIcon)
+    let blogLabel = MyLabel("블로그", size: 15, weight: .semibold, color: UIColor(red: 0.97, green: 0.84, blue: 0.58, alpha: 1.00))
     
     lazy var buttonSet: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [petButton, blogButton])
+        let petStack = UIStackView(arrangedSubviews: [petButton, petLabel])
+        let blogStack = UIStackView(arrangedSubviews: [blogButton, blogLabel])
+        [petStack, blogStack].forEach {
+            $0.axis = .vertical
+            $0.spacing = 6
+            $0.alignment = .center
+        }
+        
+        let stackView = UIStackView(arrangedSubviews: [petStack, blogStack])
         stackView.axis = .horizontal
         stackView.spacing = 10
+        stackView.distribution = .fillEqually
         return stackView
+    }()
+    
+    lazy var ButtonSetBackgroundView: UIView = {
+        let view = UIView()
+//        view.backgroundColor = UIColor(red: 0.13, green: 0.18, blue: 0.24, alpha: 1.00) // HEX #222f3e
+        view.backgroundColor = UIColor(red: 0.18, green: 0.21, blue: 0.25, alpha: 1.00) // HEX #2f3640
+        view.layer.cornerRadius = 15
+        
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(buttonSet)
+        
+        NSLayoutConstraint.activate([
+            view.widthAnchor.constraint(equalTo: buttonSet.widthAnchor, multiplier: 1.4),
+            view.heightAnchor.constraint(equalTo: buttonSet.heightAnchor, multiplier: 1.4),
+            
+            buttonSet.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            buttonSet.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 5)
+        ])
+        
+        return view
     }()
     
     // 특징 레이블 stackView
@@ -83,12 +116,30 @@ class YerinViewController: UIViewController {
     
     //MARK: UI 셋업
     func setUI() {
+        let cutGuide = UILayoutGuide()
+        view.addLayoutGuide(cutGuide)
+        
+        let insetGuide = UILayoutGuide()
+        view.addLayoutGuide(insetGuide)
+        
+        NSLayoutConstraint.activate([
+            cutGuide.trailingAnchor.constraint(equalTo: view.leadingAnchor),
+            cutGuide.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.1),
+            
+            insetGuide.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.9),
+            insetGuide.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor, multiplier: 0.9),
+            
+            insetGuide.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            insetGuide.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
+        ])
+        
         view.backgroundColor = UIColor(red: 0.19, green: 0.22, blue: 0.32, alpha: 1.00) // HEX #303952
         
         view.addSubview(profileImage)
         view.addSubview(labelSet)
-        view.addSubview(buttonSet)
+//        view.addSubview(buttonSet)
         view.addSubview(characterBackgroundView)
+        view.addSubview(ButtonSetBackgroundView)
 
         profileImage.contentMode = .scaleAspectFit
         
@@ -98,26 +149,25 @@ class YerinViewController: UIViewController {
         characterBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            characterBackgroundView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: view.frame.height * 0.05),
-            characterBackgroundView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: view.frame.width * 0.05),
-            characterBackgroundView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -(view.frame.width * 0.05)),
-            characterBackgroundView.bottomAnchor.constraint(equalTo: labelSet.topAnchor, constant: -20),
-            
-            profileImage.widthAnchor.constraint(equalToConstant: (profileImage.image?.size.width ?? 0) * 1.1),
-            profileImage.heightAnchor.constraint(equalToConstant: (profileImage.image?.size.height ?? 0) * 1.1),
-            profileImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -(view.frame.width * 0.1)),
+
+            profileImage.leadingAnchor.constraint(equalTo: cutGuide.leadingAnchor),
             profileImage.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            labelSet.bottomAnchor.constraint(equalTo: profileImage.topAnchor, constant: -10),
-            labelSet.centerXAnchor.constraint(equalTo: profileImage.centerXAnchor, constant: -(profileImage.frame.width / 2 * 0.15)),
-            
-            buttonSet.topAnchor.constraint(equalTo: profileImage.topAnchor, constant: 20),
-            buttonSet.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -(view.frame.width * 0.05))
+            labelSet.bottomAnchor.constraint(equalTo: profileImage.topAnchor, constant: -24),
+            labelSet.centerXAnchor.constraint(equalTo: profileImage.centerXAnchor, constant: -15),
+
+            ButtonSetBackgroundView.topAnchor.constraint(equalTo: labelSet.topAnchor),
+            ButtonSetBackgroundView.leadingAnchor.constraint(equalTo: labelSet.trailingAnchor, constant: 40),
+           
+            characterBackgroundView.topAnchor.constraint(equalTo: insetGuide.topAnchor),
+            characterBackgroundView.leadingAnchor.constraint(equalTo: insetGuide.leadingAnchor),
+            characterBackgroundView.trailingAnchor.constraint(equalTo: insetGuide.trailingAnchor),
+            characterBackgroundView.bottomAnchor.constraint(equalTo: labelSet.topAnchor, constant: -20),
             ])
         
         setCharacteristics()
         
-        petButton.addTarget(self, action: #selector(pushPetButton), for: .touchUpInside)
+        blogButton.addTarget(self, action: #selector(blogButtonPushed), for: .touchUpInside)
     }
     
     func setCharacteristics() {
@@ -130,8 +180,15 @@ class YerinViewController: UIViewController {
         ])
     }
     
-    //MARK: 버튼 기능
-    @objc func pushPetButton() {
+    override func viewDidLayoutSubviews() {
+        profileImage.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+    }
+    
+    // 버튼 기능
+    @objc func blogButtonPushed() {
+        let url = URL(string: "https://velog.io/@bambu113/posts")
+        let blogSafariView: SFSafariViewController = SFSafariViewController(url: url!)
+        self.present(blogSafariView, animated: true , completion: nil)
         print("petButton pushed")
     }
     
@@ -139,11 +196,11 @@ class YerinViewController: UIViewController {
 
 //MARK: 커스텀 객체
 class MyLabel: UILabel {
-    init(_ text: String, size: CGFloat, weight: UIFont.Weight) {
+    init(_ text: String, size: CGFloat, weight: UIFont.Weight, color: UIColor = .white) {
         super.init(frame: .zero)
         
         self.text = text
-        textColor = .white
+        textColor = color
         font = UIFont.systemFont(ofSize: size, weight: weight)
         textAlignment = .center
     }
@@ -159,7 +216,7 @@ class IconButton: UIButton {
         
         clipsToBounds = false
         layer.cornerRadius = 15
-        backgroundColor = UIColor(red: 0.97, green: 0.84, blue: 0.58, alpha: 1.00)
+        backgroundColor = UIColor(red: 0.97, green: 0.84, blue: 0.58, alpha: 1.00) // HEX #F7D694
         
         // 테두리 및 그림자 설정
         layer.borderWidth = 3
