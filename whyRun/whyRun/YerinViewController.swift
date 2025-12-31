@@ -18,111 +18,24 @@ class YerinViewController: UIViewController {
     let levelLabel = MyLabel("Lv.28", size: 17, weight: .bold)
     let jobLabel = MyLabel("백수", size: 17, weight: .medium)
 
-    // 레이블 stackView
-    lazy var descriptionLabel: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [levelLabel, jobLabel])
-        stackView.axis = .horizontal
-        stackView.spacing = 10
-        return stackView
-    }()
-    
-    lazy var labelSet: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [mbtiLabel, nameLabel, descriptionLabel])
-        stackView.axis = .vertical
-        stackView.spacing = 6
-        stackView.alignment = .center
-        return stackView
-    }()
-
-    // 버튼 stackView
     let petButton = IconButton(icon: .yerinPetIcon)
     let petLabel = MyLabel("펫: 짜코", size: 15, weight: .semibold, color: UIColor(red: 0.97, green: 0.84, blue: 0.58, alpha: 1.00))
     let blogButton = IconButton(icon: .yerinBlogIcon)
     let blogLabel = MyLabel("블로그", size: 15, weight: .semibold, color: UIColor(red: 0.97, green: 0.84, blue: 0.58, alpha: 1.00))
     
-    lazy var buttonSet: UIStackView = {
-        let petStack = UIStackView(arrangedSubviews: [petButton, petLabel])
-        let blogStack = UIStackView(arrangedSubviews: [blogButton, blogLabel])
-        [petStack, blogStack].forEach {
-            $0.axis = .vertical
-            $0.spacing = 6
-            $0.alignment = .center
-        }
-        
-        let stackView = UIStackView(arrangedSubviews: [petStack, blogStack])
-        stackView.axis = .horizontal
-        stackView.spacing = 10
-        stackView.distribution = .fillEqually
-        return stackView
-    }()
-    
-    lazy var ButtonSetBackgroundView: UIView = {
-        let view = UIView()
-//        view.backgroundColor = UIColor(red: 0.13, green: 0.18, blue: 0.24, alpha: 1.00) // HEX #222f3e
-        view.backgroundColor = UIColor(red: 0.18, green: 0.21, blue: 0.25, alpha: 1.00) // HEX #2f3640
-        view.layer.cornerRadius = 15
-        
-        view.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(buttonSet)
-        
-        NSLayoutConstraint.activate([
-            view.widthAnchor.constraint(equalTo: buttonSet.widthAnchor, multiplier: 1.4),
-            view.heightAnchor.constraint(equalTo: buttonSet.heightAnchor, multiplier: 1.4),
-            
-            buttonSet.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            buttonSet.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 5)
-        ])
-        
-        return view
-    }()
-    
-    // 특징 레이블 stackView
-    let characteristics: UIStackView = {
-        let keywords = UIStackView(arrangedSubviews: ["성실함", "친구들의 상담사", "취미부자"].map{ PillView($0) })
-        let styles = UIStackView(arrangedSubviews: ["팔로워", "경청", "호기심"].map{ PillView($0) })
-        
-        keywords.spacing = 5
-        styles.spacing = 5
-        
-        let first = UIStackView(arrangedSubviews: [MyLabel("나의 키워드", size: 22, weight: .bold), keywords])
-        let second = UIStackView(arrangedSubviews: [MyLabel("나의 스타일", size: 22, weight: .bold), styles])
-        let third = UIStackView(arrangedSubviews: [MyLabel("나의 한마디", size: 22, weight: .bold), MyLabel("iOS 개발자로 먹고 살 수 있는 날까지 화이팅!!", size: 18, weight: .semibold)])
-        
-        [first, second, third].forEach {
-            $0.axis = .vertical
-            $0.spacing = 6
-            $0.alignment = .trailing
-        }
-        
-        let stackView = UIStackView(arrangedSubviews: [first, second, third])
-        
-        stackView.axis = .vertical
-        stackView.spacing = 20
-        stackView.alignment = .trailing
-        
-        return stackView
-    }()
-    
-    let characterBackgroundView: UIView = {
-       let view = UIView()
-        view.backgroundColor = UIColor(white: 1, alpha: 0.2)
-        view.layer.cornerRadius = 10
-        return view
-    }()
+    let keywords = ["성실함", "친구들의 상담사", "취미부자"]
+    let styles = ["팔로워", "경청", "호기심"]
+    let words = "iOS 개발자로 먹고 살 수 있는 날까지 화이팅!!"
    
     //MARK: viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = UIColor(red: 0.19, green: 0.22, blue: 0.32, alpha: 1.00) // HEX #303952
+
         setUI() // 기초 UI 설정
-        
         setButtonActions() // 버튼 액션 설정
     }
     
     //MARK: UI 설정
-    
     // 프로필 이미지 크기 변경
     override func viewDidLayoutSubviews() {
         profileImage.contentMode = .scaleAspectFit
@@ -131,6 +44,8 @@ class YerinViewController: UIViewController {
     
     // 기초 UI 셋업
     func setUI() {
+        view.backgroundColor = UIColor(red: 0.19, green: 0.22, blue: 0.32, alpha: 1.00) // HEX #303952
+        
         // 여백을 위한 레이아웃 가이드 설정
         let cutGuide = UILayoutGuide()
         view.addLayoutGuide(cutGuide)
@@ -149,52 +64,147 @@ class YerinViewController: UIViewController {
             insetGuide.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
         ])
         
+        let myLabelSet = setMyLabelStack()
+        let buttonView = setButtonView()
+        let characterView = setCharacterView()
+        
         // 오토레이아웃 설정
         view.addSubview(profileImage)
-        view.addSubview(labelSet)
-        view.addSubview(characterBackgroundView)
-        view.addSubview(ButtonSetBackgroundView)
+        view.addSubview(myLabelSet)
+        view.addSubview(characterView)
+        view.addSubview(buttonView)
         
         profileImage.translatesAutoresizingMaskIntoConstraints = false
-        labelSet.translatesAutoresizingMaskIntoConstraints = false
-        buttonSet.translatesAutoresizingMaskIntoConstraints = false
-        characterBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+        myLabelSet.translatesAutoresizingMaskIntoConstraints = false
+        characterView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
 
             profileImage.leadingAnchor.constraint(equalTo: cutGuide.leadingAnchor),
             profileImage.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            labelSet.bottomAnchor.constraint(equalTo: profileImage.topAnchor, constant: -24),
-            labelSet.centerXAnchor.constraint(equalTo: profileImage.centerXAnchor, constant: -15),
+            myLabelSet.bottomAnchor.constraint(equalTo: profileImage.topAnchor, constant: -24),
+            myLabelSet.centerXAnchor.constraint(equalTo: profileImage.centerXAnchor, constant: -15),
 
-            ButtonSetBackgroundView.topAnchor.constraint(equalTo: labelSet.topAnchor),
-            ButtonSetBackgroundView.leadingAnchor.constraint(equalTo: labelSet.trailingAnchor, constant: 40),
+            buttonView.topAnchor.constraint(equalTo: myLabelSet.topAnchor),
+            buttonView.leadingAnchor.constraint(equalTo: myLabelSet.trailingAnchor, constant: 40),
            
-            characterBackgroundView.topAnchor.constraint(equalTo: insetGuide.topAnchor),
-            characterBackgroundView.leadingAnchor.constraint(equalTo: insetGuide.leadingAnchor),
-            characterBackgroundView.trailingAnchor.constraint(equalTo: insetGuide.trailingAnchor),
-            characterBackgroundView.bottomAnchor.constraint(equalTo: labelSet.topAnchor, constant: -20),
+            characterView.topAnchor.constraint(equalTo: insetGuide.topAnchor),
+            characterView.leadingAnchor.constraint(equalTo: insetGuide.leadingAnchor),
+            characterView.trailingAnchor.constraint(equalTo: insetGuide.trailingAnchor),
+            characterView.bottomAnchor.constraint(equalTo: myLabelSet.topAnchor, constant: -20),
             ])
-        
-        // 하위 뷰 설정
-        setCharacteristics()
     }
     
-    func setCharacteristics() {
-        characterBackgroundView.addSubview(characteristics)
-        characteristics.translatesAutoresizingMaskIntoConstraints = false
+    // 특징뷰(CharacterView) 설정
+    func setCharacterView() -> UIView {
+        let characterStack = setCharcterStack()
+        
+        let view = UIView()
+        view.backgroundColor = UIColor(white: 1, alpha: 0.2)
+        view.layer.cornerRadius = 10
+        
+        view.addSubview(characterStack)
+        characterStack.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            characteristics.centerYAnchor.constraint(equalTo: characterBackgroundView.centerYAnchor),
-            characteristics.trailingAnchor.constraint(equalTo: characterBackgroundView.trailingAnchor, constant: -15)
+            characterStack.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            characterStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15)
         ])
+        
+        return view
     }
     
+    func setCharcterStack() -> UIStackView {
+        let keywordStack = UIStackView(arrangedSubviews: keywords.map{ PillView($0) })
+        let styleStack = UIStackView(arrangedSubviews: styles.map{ PillView($0) })
+        
+        keywordStack.spacing = 5
+        styleStack.spacing = 5
+        
+        let first = UIStackView(arrangedSubviews: [MyLabel("나의 키워드", size: 22, weight: .bold), keywordStack])
+        let second = UIStackView(arrangedSubviews: [MyLabel("나의 스타일", size: 22, weight: .bold), styleStack])
+        let third = UIStackView(arrangedSubviews: [MyLabel("나의 한마디", size: 22, weight: .bold), MyLabel(words, size: 18, weight: .semibold)])
+        
+        [first, second, third].forEach {
+            $0.axis = .vertical
+            $0.spacing = 6
+            $0.alignment = .trailing
+        }
+        
+        let stackView = UIStackView(arrangedSubviews: [first, second, third])
+        
+        stackView.axis = .vertical
+        stackView.spacing = 20
+        stackView.alignment = .trailing
+        
+        return stackView
+    }
     
+    // '나'에 관련된 레이블 스택뷰(myLabelSet) 생성
+    func setMyLabelStack() -> UIStackView {
+        let descriptionLabel: UIStackView = {
+            let stackView = UIStackView(arrangedSubviews: [levelLabel, jobLabel])
+            stackView.axis = .horizontal
+            stackView.spacing = 10
+            return stackView
+        }()
+        
+        let stackView = UIStackView(arrangedSubviews: [mbtiLabel, nameLabel, descriptionLabel])
+        stackView.axis = .vertical
+        stackView.spacing = 6
+        stackView.alignment = .center
+        return stackView
+    }
+    
+    // 버튼 스택뷰 생성
+    func setButtonStack() -> UIStackView {
+        let petStack = UIStackView(arrangedSubviews: [petButton, petLabel])
+        let blogStack = UIStackView(arrangedSubviews: [blogButton, blogLabel])
+        
+        [petStack, blogStack].forEach {
+            $0.axis = .vertical
+            $0.spacing = 6
+            $0.alignment = .center
+        }
+        
+        let stackView = UIStackView(arrangedSubviews: [petStack, blogStack])
+        stackView.axis = .horizontal
+        stackView.spacing = 10
+        stackView.distribution = .fillEqually
+        return stackView
+    }
+    
+    // 버튼뷰 생성
+    func setButtonView() -> UIView {
+        let buttonSet = setButtonStack()
+        let view = UIView()
+        
+        view.backgroundColor = UIColor(red: 0.18, green: 0.21, blue: 0.25, alpha: 1.00) // HEX #2f3640
+        view.layer.cornerRadius = 15
+        
+        view.addSubview(buttonSet)
+        
+        view.translatesAutoresizingMaskIntoConstraints = false
+        buttonSet.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            view.widthAnchor.constraint(equalTo: buttonSet.widthAnchor, multiplier: 1.4),
+            view.heightAnchor.constraint(equalTo: buttonSet.heightAnchor, multiplier: 1.4),
+            
+            buttonSet.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            buttonSet.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 5)
+        ])
+        return view
+    }
 
     
-    //MARK: 버튼 기능 구현
+
+}
+
+//MARK: 버튼 기능 구현
+extension YerinViewController {
+    // 버튼 액션 설정
     func setButtonActions() {
         blogButton.addTarget(self, action: #selector(blogButtonPushed), for: .touchUpInside)
         petButton.addTarget(self, action: #selector(petButtonPushed), for: .touchUpInside)
@@ -215,11 +225,9 @@ class YerinViewController: UIViewController {
         vc.modalTransitionStyle = .crossDissolve
         present(vc, animated: true)
     }
-    
 }
 
 //MARK: 커스텀 객체
-
 // 레이블
 class MyLabel: UILabel {
     init(_ text: String, size: CGFloat, weight: UIFont.Weight, color: UIColor = .white) {
