@@ -197,9 +197,6 @@ class YerinViewController: UIViewController {
         ])
         return view
     }
-
-    
-
 }
 
 //MARK: 버튼 기능 구현
