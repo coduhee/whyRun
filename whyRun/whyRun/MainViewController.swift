@@ -19,6 +19,8 @@ class MainViewController: UIViewController {
     let teamGoalLabel = UILabel()
     let teamInfoLabel = UILabel()
     
+    private let scrollView = UIScrollView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUI()
@@ -31,7 +33,9 @@ class MainViewController: UIViewController {
         view.backgroundColor = .white
         
         setLabels()
-        let teamLabels = stackView([logoLabel, teamNameLabel, teamGoalLabel], axis: .vertical)
+        setScrollView()
+        
+        let teamLabels = stackView([logoLabel, teamNameLabel, teamGoalLabel], axis: .vertical, spacing: 0)
         
         let firstButtonStack = stackView([kjhButton, byrButton], axis: .horizontal)
         let secondButtonStack = stackView([jysButton, hjhButton], axis: .horizontal)
@@ -39,17 +43,26 @@ class MainViewController: UIViewController {
         let buttons = stackView([firstButtonStack, secondButtonStack], axis: .vertical)
 
         view.addSubview(teamLabels)
+        view.addSubview(scrollView)
         view.addSubview(buttons)
         
         teamLabels.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
         buttons.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             teamLabels.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             teamLabels.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            teamLabels.heightAnchor.constraint(equalToConstant: 160),
+            
+            scrollView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            scrollView.topAnchor.constraint(equalTo: teamLabels.bottomAnchor, constant: 15),
+            scrollView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.9),
+            scrollView.heightAnchor.constraint(equalTo: teamLabels.heightAnchor, multiplier: 1.1),
             
             buttons.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            buttons.topAnchor.constraint(equalTo: teamLabels.bottomAnchor, constant: 30),
+            buttons.topAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 30),
+            buttons.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10)
         ])
     }
 
@@ -57,14 +70,16 @@ class MainViewController: UIViewController {
     func setLabels() {
         logoLabel.text = "🧐"
         logoLabel.font = .systemFont(ofSize: 72)
-        
+
         teamNameLabel.text = "왜_되는지_모름"
         teamNameLabel.font = .systemFont(ofSize: 40, weight: .bold)
-        
+
         teamGoalLabel.text = "왜 되는지 알게되는 그날까지 디버깅!"
-        teamGoalLabel.font = .systemFont(ofSize: 24, weight: .semibold)
-        teamGoalLabel.textColor = .gray
+        teamGoalLabel.font = .systemFont(ofSize: 22, weight: .semibold)
+        teamGoalLabel.textColor = .darkGray
         
+        teamInfoLabel.numberOfLines = 0
+        teamInfoLabel.lineBreakMode = .byWordWrapping
         teamInfoLabel.text = """
             ❮고정 일정❯
             🕖 데일리 스크럼 - 10:00, 14:00, 19:30
@@ -80,7 +95,26 @@ class MainViewController: UIViewController {
             - 📝docs: 문서 추가 및 수정
             - 🚚build: 파일 이동 및 추가
             """
-        teamInfoLabel.font = .systemFont(ofSize: 22, weight: .medium)
+        teamInfoLabel.font = .systemFont(ofSize: 16, weight: .medium)
+        teamInfoLabel.textColor = .black
+    }
+    
+    func setScrollView() {
+        scrollView.isScrollEnabled = true
+        scrollView.backgroundColor = UIColor.black.withAlphaComponent(0.05)
+        scrollView.layer.cornerRadius = 10
+        
+        scrollView.addSubview(teamInfoLabel)
+        teamInfoLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            teamInfoLabel.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor, constant: 10),
+            teamInfoLabel.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor, constant: 10),
+            teamInfoLabel.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor, constant: -10),
+            teamInfoLabel.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor, constant: -10),
+            
+            teamInfoLabel.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor, constant: -24)
+        ])
     }
     
     // 스택뷰 생성
