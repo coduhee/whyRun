@@ -9,10 +9,17 @@ import UIKit
 
 class MainViewController: UIViewController {
     
-    lazy var kjhButton = NavButton(to: "김주희")
-    lazy var byrButton = NavButton(to: "변예린")
-    lazy var jysButton = NavButton(to: "장예슬")
-    lazy var hjhButton = NavButton(to: "한주헌")
+    enum Person: String {
+        case 김주희 = "김주희"
+        case 변예린 = "변예린"
+        case 장예슬 = "장예슬"
+        case 한주헌 = "한주헌"
+    }
+    
+    lazy var kjhButton = NavButton(to: Person.김주희.rawValue)
+    lazy var byrButton = NavButton(to: Person.변예린.rawValue)
+    lazy var jysButton = NavButton(to: Person.장예슬.rawValue)
+    lazy var hjhButton = NavButton(to: Person.한주헌.rawValue)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,9 +67,22 @@ class MainViewController: UIViewController {
     }
     
     @objc private func navigateTo(_ sender: NavButton) {
+        var vc = UIViewController()
+        guard let name = sender.currentTitle else { return }
+        guard let person = Person(rawValue: name) else { return }
+    
+        switch person {
+        case .김주희:
+            vc = MemberADetailViewController()
+        case .변예린:
+            vc = YerinViewController()
+        case .장예슬:
+            vc = YSMainViewController()
+        case .한주헌:
+            vc = PageHan()
+        }
         
-        print(sender.currentTitle ?? "없음")
-
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
