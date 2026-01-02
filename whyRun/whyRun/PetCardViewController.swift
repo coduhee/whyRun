@@ -9,6 +9,7 @@ import UIKit
 
 // 반려동물 카드 VC
 final class PetCardViewController: UIViewController {
+    var isShadowPathSet = false
     
     // 배경 반투명 뷰
    let dimView: UIView = {
@@ -36,6 +37,7 @@ final class PetCardViewController: UIViewController {
         view.layer.shadowOpacity = 1
         view.layer.shadowRadius = 10
         view.layer.shadowOffset = .zero
+        
         return view
     }()
     
@@ -52,6 +54,15 @@ final class PetCardViewController: UIViewController {
         setContent()
         setDismiss()
     }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        guard !isShadowPathSet else { return }
+        shadowView.layer.shadowPath = UIBezierPath(roundedRect: shadowView.bounds, cornerRadius: shadowView.layer.cornerRadius).cgPath
+        isShadowPathSet = true
+    }
+
     
     func setupLayout() {
         view.addSubview(dimView)

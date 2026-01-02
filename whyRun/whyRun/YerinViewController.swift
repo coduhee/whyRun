@@ -42,6 +42,8 @@ class YerinViewController: UIViewController {
     //MARK: UI 설정
     // 프로필 이미지 크기 변경
     override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
         profileImage.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
     }
     
@@ -286,8 +288,9 @@ class IconButton: UIButton {
         layer.borderWidth = 3
         layer.borderColor = #colorLiteral(red: 0.9647058824, green: 0.7254901961, blue: 0.231372549, alpha: 1) // HEX #f6b93b
         layer.shadowColor = #colorLiteral(red: 1, green: 0.9803921569, blue: 0.3960784314, alpha: 1) // HEX #fffa65
-        layer.shadowOpacity = 1
+        layer.shadowOpacity = 0.8
         layer.shadowOffset = .zero
+        layer.shadowRadius = 4
         
         // 버튼 이미지 설정
         setImage(icon, for: .normal)
@@ -300,6 +303,12 @@ class IconButton: UIButton {
             heightAnchor.constraint(equalToConstant: 65),
             widthAnchor.constraint(equalToConstant: 65)
         ])
+    }
+    
+    // shadowPath 설정
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: layer.cornerRadius).cgPath
     }
     
     required init?(coder: NSCoder) {
