@@ -15,7 +15,7 @@ class YerinViewController: UIViewController {
     
     let mbtiLabel = MyLabel("INTP", size: 17, weight: .medium)
     let nameLabel = MyLabel("변예린", size: 25, weight: .bold)
-    let levelLabel = MyLabel("Lv.28", size: 17, weight: .bold)
+    let levelLabel = MyLabel("Lv.29", size: 17, weight: .bold)
     let jobLabel = MyLabel("백수", size: 17, weight: .medium)
 
     let petButton = IconButton(icon: .yerinPetIcon)
