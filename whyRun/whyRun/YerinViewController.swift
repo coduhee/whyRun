@@ -13,15 +13,15 @@ class YerinViewController: UIViewController {
     let profileImage = UIImageView(image: .yerinProfile)
     let petImage = UIImageView(image: .yerinPet)
     
-    let mbtiLabel = MyLabel("INTP", size: 17, weight: .medium)
-    let nameLabel = MyLabel("변예린", size: 25, weight: .bold)
-    let levelLabel = MyLabel("Lv.29", size: 17, weight: .bold)
-    let jobLabel = MyLabel("백수", size: 17, weight: .medium)
+    let mbtiLabel = UILabel()
+    let nameLabel = UILabel()
+    let levelLabel = UILabel()
+    let jobLabel = UILabel()
 
     let petButton = IconButton(icon: .yerinPetIcon)
-    let petLabel = MyLabel("펫: 짜코", size: 15, weight: .semibold, color: UIColor(red: 0.97, green: 0.84, blue: 0.58, alpha: 1.00))
+    let petLabel = UILabel()
     let blogButton = IconButton(icon: .yerinBlogIcon)
-    let blogLabel = MyLabel("블로그", size: 15, weight: .semibold, color: UIColor(red: 0.97, green: 0.84, blue: 0.58, alpha: 1.00))
+    let blogLabel = UILabel()
     
     let keywords = ["성실함", "친구들의 상담사", "취미부자"]
     let styles = ["팔로워", "경청", "호기심"]
@@ -42,8 +42,41 @@ class YerinViewController: UIViewController {
         profileImage.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
     }
     
+    func setLabels() {
+        // 텍스트 설정
+        mbtiLabel.text = "INTP"
+        mbtiLabel.font = .systemFont(ofSize: 17, weight: .medium)
+        
+        nameLabel.text = "변예린"
+        nameLabel.font = .systemFont(ofSize: 25, weight: .bold)
+        
+        levelLabel.text = "Lv.29"
+        levelLabel.font = .systemFont(ofSize: 17, weight: .bold)
+        
+        jobLabel.text = "백수"
+        jobLabel.font = .systemFont(ofSize: 17, weight: .medium)
+        
+        petLabel.text = "펫: 짜코"
+        petLabel.font = .systemFont(ofSize: 15, weight: .bold)
+
+        blogLabel.text = "블로그"
+        blogLabel.font = .systemFont(ofSize: 15, weight: .bold)
+        
+        let buttonLabelColor = UIColor(red: 0.97, green: 0.84, blue: 0.58, alpha: 1.00)
+        
+        // 색상 설정
+        [mbtiLabel, nameLabel, levelLabel, jobLabel].forEach {
+            $0.textColor = .white
+        }
+        [petLabel, blogLabel].forEach {
+            $0.textColor = buttonLabelColor
+        }
+    }
+    
     // 기초 UI 셋업
     func setUI() {
+        setLabels()
+        
         view.backgroundColor = UIColor(red: 0.19, green: 0.22, blue: 0.32, alpha: 1.00) // HEX #303952
         
         // 여백을 위한 레이아웃 가이드 설정

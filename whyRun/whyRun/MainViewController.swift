@@ -69,11 +69,6 @@ class MainViewController: UIViewController {
             buttons.topAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 20),
             buttons.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
             buttons.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.9),
-            
-            firstButtonStack.widthAnchor.constraint(equalTo: buttons.widthAnchor),
-//            firstButtonStack.heightAnchor.constraint(equalTo: buttons.heightAnchor, multiplier: 0.5),
-            secondButtonStack.widthAnchor.constraint(equalTo: buttons.widthAnchor),
-//            secondButtonStack.heightAnchor.constraint(equalTo: buttons.heightAnchor, multiplier: 0.5),
         ])
     }
 
@@ -120,10 +115,10 @@ class MainViewController: UIViewController {
         teamInfoLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            teamInfoLabel.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor, constant: 10),
-            teamInfoLabel.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor, constant: 10),
-            teamInfoLabel.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor, constant: -10),
-            teamInfoLabel.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor, constant: -10),
+            teamInfoLabel.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor, constant: 15),
+            teamInfoLabel.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor, constant: 15),
+            teamInfoLabel.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor, constant: -15),
+            teamInfoLabel.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor, constant: -15),
             
             teamInfoLabel.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor, constant: -24)
         ])
@@ -147,6 +142,7 @@ class MainViewController: UIViewController {
         }
     }
     
+    // 각 vc로 이동
     @objc private func navigateTo(_ sender: NavButton) {
         var vc = UIViewController()
         guard let name = sender.currentTitle else { return }
@@ -166,6 +162,7 @@ class MainViewController: UIViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
     
+    // 버튼 모양 설정
     func roundButton() {
         [kjhButton, byrButton, jysButton, hjhButton].forEach { (btn: NavButton) in
             btn.layer.cornerRadius = btn.frame.width / 2
