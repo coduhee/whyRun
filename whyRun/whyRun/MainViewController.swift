@@ -12,7 +12,7 @@ class MainViewController: UIViewController {
     let kjh = Person(name: "👑김주희", vc: MemberADetailViewController(), img: UIImage(resource: .kjhAvatar), color: UIColor(red: 0.71, green: 0.58, blue: 0.98, alpha: 1.00))
     let byr = Person(name: "변예린", vc: YerinViewController(), img: UIImage(resource: .byrAvatar), color: UIColor(red: 0.98, green: 0.91, blue: 0.50, alpha: 1.00))
     let jys = Person(name: "장예슬", vc: YSMainViewController(), img: UIImage(resource: .jysAvatar), color: UIColor(red: 0.71, green: 0.71, blue: 0.75, alpha: 1.00))
-    let hjh = Person(name: "한주헌", vc: PageHan(), img: UIImage(resource: .hjhAvatar), color: UIColor(red: 0.93, green: 0.59, blue: 0.98, alpha: 1.00))
+    let hjh = Person(name: "한주헌", vc: HanMainViewController(), img: UIImage(resource: .hjhAvatar), color: UIColor(red: 0.93, green: 0.59, blue: 0.98, alpha: 1.00))
     lazy var persons = [kjh, byr, jys, hjh]
     
     let kjhButton = UIButton()

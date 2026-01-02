@@ -19,6 +19,7 @@ class SplashViewCotroller : UIViewController {
         label.textAlignment = .center
         label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.alpha = 0.0
         return label
     }()
     
@@ -29,6 +30,7 @@ class SplashViewCotroller : UIViewController {
         label.textAlignment = .center
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 80, weight: .bold)
+        label.alpha = 0.0
         return label
     }()
     
