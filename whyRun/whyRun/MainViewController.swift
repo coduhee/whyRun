@@ -8,18 +8,16 @@
 import UIKit
 
 class MainViewController: UIViewController {
+  
+    let kjhButton = NavButton(to: Person.김주희.rawValue)
+    let byrButton = NavButton(to: Person.변예린.rawValue)
+    let jysButton = NavButton(to: Person.장예슬.rawValue)
+    let hjhButton = NavButton(to: Person.한주헌.rawValue)
     
-    enum Person: String {
-        case 김주희 = "김주희"
-        case 변예린 = "변예린"
-        case 장예슬 = "장예슬"
-        case 한주헌 = "한주헌"
-    }
-    
-    lazy var kjhButton = NavButton(to: Person.김주희.rawValue)
-    lazy var byrButton = NavButton(to: Person.변예린.rawValue)
-    lazy var jysButton = NavButton(to: Person.장예슬.rawValue)
-    lazy var hjhButton = NavButton(to: Person.한주헌.rawValue)
+    let logoLabel = UILabel()
+    let teamNameLabel = UILabel()
+    let teamGoalLabel = UILabel()
+    let teamInfoLabel = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,23 +30,61 @@ class MainViewController: UIViewController {
     func setUI() {
         view.backgroundColor = .white
         
+        setLabels()
+        let teamLabels = stackView([logoLabel, teamNameLabel, teamGoalLabel], axis: .vertical)
+        
         let firstButtonStack = stackView([kjhButton, byrButton], axis: .horizontal)
         let secondButtonStack = stackView([jysButton, hjhButton], axis: .horizontal)
         
         let buttons = stackView([firstButtonStack, secondButtonStack], axis: .vertical)
-        
+
+        view.addSubview(teamLabels)
         view.addSubview(buttons)
         
+        teamLabels.translatesAutoresizingMaskIntoConstraints = false
         buttons.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
+            teamLabels.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            teamLabels.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            
             buttons.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            buttons.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            buttons.topAnchor.constraint(equalTo: teamLabels.bottomAnchor, constant: 30),
         ])
     }
 
+    // 레이블 설정
+    func setLabels() {
+        logoLabel.text = "🧐"
+        logoLabel.font = .systemFont(ofSize: 72)
+        
+        teamNameLabel.text = "왜_되는지_모름"
+        teamNameLabel.font = .systemFont(ofSize: 40, weight: .bold)
+        
+        teamGoalLabel.text = "왜 되는지 알게되는 그날까지 디버깅!"
+        teamGoalLabel.font = .systemFont(ofSize: 24, weight: .semibold)
+        teamGoalLabel.textColor = .gray
+        
+        teamInfoLabel.text = """
+            ❮고정 일정❯
+            🕖 데일리 스크럼 - 10:00, 14:00, 19:30
+            🍚 점심 식사 - 13:00 ~ 14:00
+            🍚 저녁 식사 - 18:00 ~ 19:00
+            
+            ❮규칙❯
+            - ✨feat: 기능 추가
+            - ♻️refactor: 기능과 관련된 개선/전면수정
+            - ✅test: 테스트 추가
+            - 🩹chore: 네이밍, 컨벤션 등 수정
+            - 🐛fix: 오류 수정
+            - 📝docs: 문서 추가 및 수정
+            - 🚚build: 파일 이동 및 추가
+            """
+        teamInfoLabel.font = .systemFont(ofSize: 22, weight: .medium)
+    }
+    
     // 스택뷰 생성
-    func stackView(_ views: [UIView], axis: NSLayoutConstraint.Axis, spacing: CGFloat = 10) -> UIStackView{
+    func stackView(_ views: [UIView], axis: NSLayoutConstraint.Axis, spacing: CGFloat = 10) -> UIStackView {
         let stack = UIStackView(arrangedSubviews: views)
         stack.axis = axis
         stack.spacing = spacing
@@ -60,7 +96,6 @@ class MainViewController: UIViewController {
     //MARK: 액션 설정
     // 버튼 액션 설정
     func setButtonAction() {
-
         [kjhButton, byrButton, jysButton, hjhButton].forEach { (btn: NavButton) in
             btn.addTarget(self, action: #selector(navigateTo), for: .touchUpInside)
         }
@@ -87,6 +122,13 @@ class MainViewController: UIViewController {
 }
 
 //MARK: 커스텀 객체
+enum Person: String {
+    case 김주희 = "김주희"
+    case 변예린 = "변예린"
+    case 장예슬 = "장예슬"
+    case 한주헌 = "한주헌"
+}
+
 class NavButton: UIButton {
     
     init(to page: String) {
@@ -94,6 +136,8 @@ class NavButton: UIButton {
         
         setTitle(page, for: .normal)
         setTitleColor(.black, for: .normal)
+        
+        backgroundColor = .blue
         
         translatesAutoresizingMaskIntoConstraints = false
         
