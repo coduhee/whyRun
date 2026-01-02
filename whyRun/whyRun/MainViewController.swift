@@ -8,11 +8,18 @@
 import UIKit
 
 class MainViewController: UIViewController {
-  
-    let kjhButton = NavButton(to: Person.김주희.rawValue)
-    let byrButton = NavButton(to: Person.변예린.rawValue)
-    let jysButton = NavButton(to: Person.장예슬.rawValue)
-    let hjhButton = NavButton(to: Person.한주헌.rawValue)
+    
+    let kjh = Person(name: "👑김주희", vc: MemberADetailViewController(), img: UIImage(resource: .kjhAvatar), color: UIColor(red: 0.71, green: 0.58, blue: 0.98, alpha: 1.00))
+    let byr = Person(name: "변예린", vc: YerinViewController(), img: UIImage(resource: .byrAvatar), color: UIColor(red: 0.98, green: 0.91, blue: 0.50, alpha: 1.00))
+    let jys = Person(name: "장예슬", vc: YSMainViewController(), img: UIImage(resource: .jysAvatar), color: UIColor(red: 0.71, green: 0.71, blue: 0.75, alpha: 1.00))
+    let hjh = Person(name: "한주헌", vc: PageHan(), img: UIImage(resource: .hjhAvatar), color: UIColor(red: 0.93, green: 0.59, blue: 0.98, alpha: 1.00))
+    lazy var persons = [kjh, byr, jys, hjh]
+    
+    let kjhButton = UIButton()
+    let byrButton = UIButton()
+    let jysButton = UIButton()
+    let hjhButton = UIButton()
+    lazy var personalButtons = [kjhButton, byrButton, jysButton, hjhButton]
     
     let logoLabel = UILabel()
     let teamNameLabel = UILabel()
@@ -38,6 +45,7 @@ class MainViewController: UIViewController {
         
         setLabels()
         setScrollView()
+        setPersonalButtons()
         
         let teamLabels = stackView([logoLabel, teamNameLabel, teamGoalLabel], axis: .vertical, spacing: 0)
         teamLabels.alignment = .center
@@ -45,15 +53,17 @@ class MainViewController: UIViewController {
         let firstButtonStack = stackView([kjhButton, byrButton], axis: .horizontal)
         let secondButtonStack = stackView([jysButton, hjhButton], axis: .horizontal)
         
-        let buttons = stackView([firstButtonStack, secondButtonStack], axis: .vertical)
+        let buttonStack = stackView([firstButtonStack, secondButtonStack], axis: .vertical)
 
         view.addSubview(teamLabels)
         view.addSubview(scrollView)
-        view.addSubview(buttons)
+        view.addSubview(buttonStack)
         
         teamLabels.translatesAutoresizingMaskIntoConstraints = false
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        buttons.translatesAutoresizingMaskIntoConstraints = false
+        buttonStack.translatesAutoresizingMaskIntoConstraints = false
+        firstButtonStack.translatesAutoresizingMaskIntoConstraints = false
+        secondButtonStack.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             teamLabels.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -62,13 +72,13 @@ class MainViewController: UIViewController {
             
             scrollView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             scrollView.topAnchor.constraint(equalTo: teamLabels.bottomAnchor, constant: 15),
-            scrollView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.9),
+            scrollView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -30),
             scrollView.heightAnchor.constraint(equalTo: teamLabels.heightAnchor, multiplier: 1.1),
             
-            buttons.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            buttons.topAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 20),
-            buttons.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
-            buttons.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.9),
+            buttonStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            buttonStack.topAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 20),
+            buttonStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
+            buttonStack.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -30),
         ])
     }
 
@@ -105,6 +115,19 @@ class MainViewController: UIViewController {
         teamInfoLabel.textColor = .black
     }
     
+    func setPersonalButtons() {
+        personalButtons.enumerated().forEach {
+            $1.setImage(persons[$0].img.resized(to: CGSize(width: 80, height: 80)), for: .normal)
+            $1.setTitle(persons[$0].name, for: .normal)
+            $1.titleLabel?.font = .systemFont(ofSize: 20, weight: .bold)
+            $1.setTitleColor(.black, for: .normal)
+            $1.backgroundColor = persons[$0].color
+            
+            $1.contentHorizontalAlignment = .center
+            $1.contentVerticalAlignment = .center
+        }
+    }
+    
     //스크롤뷰 설정
     func setScrollView() {
         scrollView.isScrollEnabled = true
@@ -120,7 +143,7 @@ class MainViewController: UIViewController {
             teamInfoLabel.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor, constant: -15),
             teamInfoLabel.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor, constant: -15),
             
-            teamInfoLabel.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor, constant: -24)
+            teamInfoLabel.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor, constant: -30)
         ])
     }
     
@@ -137,58 +160,42 @@ class MainViewController: UIViewController {
     //MARK: 동작 설정
     // 버튼 액션 설정
     func setButtonAction() {
-        [kjhButton, byrButton, jysButton, hjhButton].forEach { (btn: NavButton) in
-            btn.addTarget(self, action: #selector(navigateTo), for: .touchUpInside)
+        personalButtons.forEach {
+            $0.addTarget(self, action: #selector(navigateTo), for: .touchUpInside)
         }
     }
     
     // 각 vc로 이동
-    @objc private func navigateTo(_ sender: NavButton) {
-        var vc = UIViewController()
+    @objc private func navigateTo(_ sender: UIButton) {
         guard let name = sender.currentTitle else { return }
-        guard let person = Person(rawValue: name) else { return }
+        let vc = persons.filter { $0.name == name }[0].vc
     
-        switch person {
-        case .김주희:
-            vc = MemberADetailViewController()
-        case .변예린:
-            vc = YerinViewController()
-        case .장예슬:
-            vc = YSMainViewController()
-        case .한주헌:
-            vc = PageHan()
-        }
-        
         navigationController?.pushViewController(vc, animated: true)
     }
     
     // 버튼 모양 설정
     func roundButton() {
-        [kjhButton, byrButton, jysButton, hjhButton].forEach { (btn: NavButton) in
-            btn.layer.cornerRadius = btn.frame.width / 2
+        personalButtons.forEach {
+            let size = min($0.bounds.width, $0.bounds.height)
+            $0.layer.cornerRadius = size / 2
+            $0.clipsToBounds = true
         }
     }
 }
 
 //MARK: 커스텀 객체
-enum Person: String {
-    case 김주희 = "👑김주희"
-    case 변예린 = "변예린"
-    case 장예슬 = "장예슬"
-    case 한주헌 = "한주헌"
+struct Person {
+    let name: String
+    let vc: UIViewController
+    let img: UIImage
+    let color: UIColor
 }
 
-class NavButton: UIButton {
-    init(to page: String) {
-        super.init(frame: .zero)
-        
-        setTitle(page, for: .normal)
-        setTitleColor(.black, for: .normal)
-        
-        backgroundColor = .cyan
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+// 이미지 리사이징
+extension UIImage {
+    func resized(to size: CGSize) -> UIImage {
+        UIGraphicsImageRenderer(size: size).image { _ in
+            self.draw(in: CGRect(origin: .zero, size: size))
+        }
     }
 }
