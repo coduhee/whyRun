@@ -208,14 +208,14 @@ extension YerinViewController {
     }
     
     // 블로그 버튼 액션
-    @objc func blogButtonPushed() {
+    @objc private func blogButtonPushed() {
         let url = URL(string: "https://velog.io/@bambu113/posts")
         let blogSafariView: SFSafariViewController = SFSafariViewController(url: url!)
         self.present(blogSafariView, animated: true , completion: nil)
     }
     
     // 펫 버튼 액션
-    @objc func petButtonPushed() {
+    @objc private func petButtonPushed() {
         let vc = PetCardViewController()
         vc.modalPresentationStyle = .overFullScreen
         vc.modalTransitionStyle = .crossDissolve
