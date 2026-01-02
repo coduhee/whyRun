@@ -42,7 +42,6 @@ class YerinViewController: UIViewController {
     //MARK: UI 설정
     // 프로필 이미지 크기 변경
     override func viewDidLayoutSubviews() {
-        profileImage.contentMode = .scaleAspectFit
         profileImage.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
     }
     
@@ -50,7 +49,7 @@ class YerinViewController: UIViewController {
     func setUI() {
         setLabels()
         
-        view.backgroundColor = UIColor(red: 0.19, green: 0.22, blue: 0.32, alpha: 1.00) // HEX #303952
+        view.backgroundColor = #colorLiteral(red: 0.1882352941, green: 0.2235294118, blue: 0.3215686275, alpha: 1) // HEX #303952
         
         // 여백을 위한 레이아웃 가이드 설정
         let cutGuide = UILayoutGuide()
@@ -73,6 +72,8 @@ class YerinViewController: UIViewController {
         let myLabelSet = setMyLabelStack()
         let buttonView = setButtonView()
         let characterView = setCharacterView()
+        
+        profileImage.contentMode = .scaleAspectFit
         
         // 오토레이아웃 설정
         view.addSubview(profileImage)
@@ -136,7 +137,7 @@ class YerinViewController: UIViewController {
         words.font = .systemFont(ofSize: 18, weight: .semibold)
         
         // 색상 설정
-        let buttonLabelColor = UIColor(red: 0.97, green: 0.84, blue: 0.58, alpha: 1.00)
+        let buttonLabelColor = #colorLiteral(red: 0.968627451, green: 0.8392156863, blue: 0.5803921569, alpha: 1) // HEX #F7D694
         
         [mbtiLabel, nameLabel, levelLabel, jobLabel, keywordLabel, styleLabel, wordLabel, words].forEach {
             $0.textColor = .white
@@ -230,7 +231,7 @@ class YerinViewController: UIViewController {
         let buttonSet = setButtonStack()
         let view = UIView()
         
-        view.backgroundColor = UIColor(red: 0.18, green: 0.21, blue: 0.25, alpha: 1.00) // HEX #2f3640
+        view.backgroundColor = #colorLiteral(red: 0.1843137255, green: 0.2117647059, blue: 0.2509803922, alpha: 1) // HEX #2f3640
         view.layer.cornerRadius = 15
         
         view.addSubview(buttonSet)
@@ -253,23 +254,21 @@ class YerinViewController: UIViewController {
 extension YerinViewController {
     // 버튼 액션 설정
     func setButtonActions() {
-        blogButton.addTarget(self, action: #selector(blogButtonPushed), for: .touchUpInside)
-        petButton.addTarget(self, action: #selector(petButtonPushed), for: .touchUpInside)
-    }
-    
-    // 블로그 버튼 액션
-    @objc private func blogButtonPushed() {
-        let url = URL(string: "https://velog.io/@bambu113/posts")
-        let blogSafariView: SFSafariViewController = SFSafariViewController(url: url!)
-        self.present(blogSafariView, animated: true , completion: nil)
-    }
-    
-    // 펫 버튼 액션
-    @objc private func petButtonPushed() {
-        let vc = PetCardViewController()
-        vc.modalPresentationStyle = .overFullScreen
-        vc.modalTransitionStyle = .crossDissolve
-        present(vc, animated: true)
+        let blogAction = UIAction { _ in
+            let url = URL(string: "https://velog.io/@bambu113/posts")
+            let blogSafariView: SFSafariViewController = SFSafariViewController(url: url!)
+            self.present(blogSafariView, animated: true , completion: nil)
+        }
+        
+        let petAction = UIAction { _ in
+            let vc = PetCardViewController()
+            vc.modalPresentationStyle = .overFullScreen
+            vc.modalTransitionStyle = .crossDissolve
+            self.present(vc, animated: true)
+        }
+        
+        blogButton.addAction(blogAction, for: .touchUpInside)
+        petButton.addAction(petAction, for: .touchUpInside)
     }
 }
 
@@ -281,12 +280,12 @@ class IconButton: UIButton {
         
         clipsToBounds = false
         layer.cornerRadius = 15
-        backgroundColor = UIColor(red: 0.97, green: 0.84, blue: 0.58, alpha: 1.00) // HEX #F7D694
+        backgroundColor = #colorLiteral(red: 0.968627451, green: 0.8392156863, blue: 0.5803921569, alpha: 1) // HEX #F7D694
         
         // 테두리 및 그림자 설정
         layer.borderWidth = 3
-        layer.borderColor = UIColor(red: 0.96, green: 0.73, blue: 0.23, alpha: 1.00).cgColor // HEX #f6b93b
-        layer.shadowColor = UIColor(red: 1.00, green: 0.98, blue: 0.40, alpha: 1.00).cgColor // HEX #fffa65
+        layer.borderColor = #colorLiteral(red: 0.9647058824, green: 0.7254901961, blue: 0.231372549, alpha: 1) // HEX #f6b93b
+        layer.shadowColor = #colorLiteral(red: 1, green: 0.9803921569, blue: 0.3960784314, alpha: 1) // HEX #fffa65
         layer.shadowOpacity = 1
         layer.shadowOffset = .zero
         
