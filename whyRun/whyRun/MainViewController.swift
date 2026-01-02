@@ -27,6 +27,10 @@ class MainViewController: UIViewController {
         setButtonAction()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        roundButton()
+    }
     //MARK: UI 설정
     // UI 셋업 설정
     func setUI() {
@@ -36,6 +40,7 @@ class MainViewController: UIViewController {
         setScrollView()
         
         let teamLabels = stackView([logoLabel, teamNameLabel, teamGoalLabel], axis: .vertical, spacing: 0)
+        teamLabels.alignment = .center
         
         let firstButtonStack = stackView([kjhButton, byrButton], axis: .horizontal)
         let secondButtonStack = stackView([jysButton, hjhButton], axis: .horizontal)
@@ -61,8 +66,14 @@ class MainViewController: UIViewController {
             scrollView.heightAnchor.constraint(equalTo: teamLabels.heightAnchor, multiplier: 1.1),
             
             buttons.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            buttons.topAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 30),
-            buttons.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10)
+            buttons.topAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 20),
+            buttons.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
+            buttons.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.9),
+            
+            firstButtonStack.widthAnchor.constraint(equalTo: buttons.widthAnchor),
+//            firstButtonStack.heightAnchor.constraint(equalTo: buttons.heightAnchor, multiplier: 0.5),
+            secondButtonStack.widthAnchor.constraint(equalTo: buttons.widthAnchor),
+//            secondButtonStack.heightAnchor.constraint(equalTo: buttons.heightAnchor, multiplier: 0.5),
         ])
     }
 
@@ -99,6 +110,7 @@ class MainViewController: UIViewController {
         teamInfoLabel.textColor = .black
     }
     
+    //스크롤뷰 설정
     func setScrollView() {
         scrollView.isScrollEnabled = true
         scrollView.backgroundColor = UIColor.black.withAlphaComponent(0.05)
@@ -122,12 +134,12 @@ class MainViewController: UIViewController {
         let stack = UIStackView(arrangedSubviews: views)
         stack.axis = axis
         stack.spacing = spacing
-        stack.alignment = .center
+        stack.alignment = .fill
         stack.distribution = .fillEqually
         return stack
     }
     
-    //MARK: 액션 설정
+    //MARK: 동작 설정
     // 버튼 액션 설정
     func setButtonAction() {
         [kjhButton, byrButton, jysButton, hjhButton].forEach { (btn: NavButton) in
@@ -153,32 +165,30 @@ class MainViewController: UIViewController {
         
         navigationController?.pushViewController(vc, animated: true)
     }
+    
+    func roundButton() {
+        [kjhButton, byrButton, jysButton, hjhButton].forEach { (btn: NavButton) in
+            btn.layer.cornerRadius = btn.frame.width / 2
+        }
+    }
 }
 
 //MARK: 커스텀 객체
 enum Person: String {
-    case 김주희 = "김주희"
+    case 김주희 = "👑김주희"
     case 변예린 = "변예린"
     case 장예슬 = "장예슬"
     case 한주헌 = "한주헌"
 }
 
 class NavButton: UIButton {
-    
     init(to page: String) {
         super.init(frame: .zero)
         
         setTitle(page, for: .normal)
         setTitleColor(.black, for: .normal)
         
-        backgroundColor = .blue
-        
-        translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            widthAnchor.constraint(equalToConstant: 100),
-            heightAnchor.constraint(equalToConstant: 100)
-        ])
+        backgroundColor = .cyan
     }
     
     required init?(coder: NSCoder) {
