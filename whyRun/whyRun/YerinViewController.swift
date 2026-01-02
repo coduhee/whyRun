@@ -25,8 +25,12 @@ class YerinViewController: UIViewController {
     
     let keywords = ["성실함", "친구들의 상담사", "취미부자"]
     let styles = ["팔로워", "경청", "호기심"]
-    let words = "iOS 개발자로 먹고 살 수 있는 날까지 화이팅!!"
+    let words = UILabel()
 
+    let keywordLabel = UILabel()
+    let styleLabel = UILabel()
+    let wordLabel = UILabel()
+    
     //MARK: viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,37 +44,6 @@ class YerinViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         profileImage.contentMode = .scaleAspectFit
         profileImage.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
-    }
-    
-    func setLabels() {
-        // 텍스트 설정
-        mbtiLabel.text = "INTP"
-        mbtiLabel.font = .systemFont(ofSize: 17, weight: .medium)
-        
-        nameLabel.text = "변예린"
-        nameLabel.font = .systemFont(ofSize: 25, weight: .bold)
-        
-        levelLabel.text = "Lv.29"
-        levelLabel.font = .systemFont(ofSize: 17, weight: .bold)
-        
-        jobLabel.text = "백수"
-        jobLabel.font = .systemFont(ofSize: 17, weight: .medium)
-        
-        petLabel.text = "펫: 짜코"
-        petLabel.font = .systemFont(ofSize: 15, weight: .bold)
-
-        blogLabel.text = "블로그"
-        blogLabel.font = .systemFont(ofSize: 15, weight: .bold)
-        
-        let buttonLabelColor = UIColor(red: 0.97, green: 0.84, blue: 0.58, alpha: 1.00)
-        
-        // 색상 설정
-        [mbtiLabel, nameLabel, levelLabel, jobLabel].forEach {
-            $0.textColor = .white
-        }
-        [petLabel, blogLabel].forEach {
-            $0.textColor = buttonLabelColor
-        }
     }
     
     // 기초 UI 셋업
@@ -129,6 +102,50 @@ class YerinViewController: UIViewController {
             ])
     }
     
+    // 레이블 설정
+    func setLabels() {
+        // 텍스트 설정
+        mbtiLabel.text = "INTP"
+        mbtiLabel.font = .systemFont(ofSize: 17, weight: .medium)
+        
+        nameLabel.text = "변예린"
+        nameLabel.font = .systemFont(ofSize: 25, weight: .bold)
+        
+        levelLabel.text = "Lv.29"
+        levelLabel.font = .systemFont(ofSize: 17, weight: .bold)
+        
+        jobLabel.text = "백수"
+        jobLabel.font = .systemFont(ofSize: 17, weight: .medium)
+        
+        petLabel.text = "펫: 짜코"
+        petLabel.font = .systemFont(ofSize: 15, weight: .bold)
+
+        blogLabel.text = "블로그"
+        blogLabel.font = .systemFont(ofSize: 15, weight: .bold)
+        
+        keywordLabel.text = "나의 키워드"
+        keywordLabel.font = .systemFont(ofSize: 22, weight: .bold)
+        
+        styleLabel.text = "나의 스타일"
+        styleLabel.font = .systemFont(ofSize: 22, weight: .bold)
+        
+        wordLabel.text = "나의 한마디"
+        wordLabel.font = .systemFont(ofSize: 22, weight: .bold)
+        
+        words.text = "iOS 개발자로 먹고 살 수 있는 날까지 화이팅!!"
+        words.font = .systemFont(ofSize: 18, weight: .semibold)
+        
+        // 색상 설정
+        let buttonLabelColor = UIColor(red: 0.97, green: 0.84, blue: 0.58, alpha: 1.00)
+        
+        [mbtiLabel, nameLabel, levelLabel, jobLabel, keywordLabel, styleLabel, wordLabel, words].forEach {
+            $0.textColor = .white
+        }
+        [petLabel, blogLabel].forEach {
+            $0.textColor = buttonLabelColor
+        }
+    }
+    
     // 특징뷰(CharacterView) 설정
     func setCharacterView() -> UIView {
         let characterStack = setCharcterStack()
@@ -155,9 +172,9 @@ class YerinViewController: UIViewController {
         keywordStack.spacing = 5
         styleStack.spacing = 5
         
-        let first = UIStackView(arrangedSubviews: [MyLabel("나의 키워드", size: 22, weight: .bold), keywordStack])
-        let second = UIStackView(arrangedSubviews: [MyLabel("나의 스타일", size: 22, weight: .bold), styleStack])
-        let third = UIStackView(arrangedSubviews: [MyLabel("나의 한마디", size: 22, weight: .bold), MyLabel(words, size: 18, weight: .semibold)])
+        let first = UIStackView(arrangedSubviews: [keywordLabel, keywordStack])
+        let second = UIStackView(arrangedSubviews: [styleLabel, styleStack])
+        let third = UIStackView(arrangedSubviews: [wordLabel, words])
         
         [first, second, third].forEach {
             $0.axis = .vertical
@@ -257,22 +274,6 @@ extension YerinViewController {
 }
 
 //MARK: 커스텀 객체
-// 레이블
-class MyLabel: UILabel {
-    init(_ text: String, size: CGFloat, weight: UIFont.Weight, color: UIColor = .white) {
-        super.init(frame: .zero)
-        
-        self.text = text
-        textColor = color
-        font = UIFont.systemFont(ofSize: size, weight: weight)
-        textAlignment = .center
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
 // 아이콘 버튼
 class IconButton: UIButton {
     init(icon: UIImage) {
@@ -312,7 +313,13 @@ class PillView: UIView {
     init(_ text: String) {
         super.init(frame: .zero)
         
-        let label = MyLabel(text, size: 18, weight: .bold)
+        let label: UILabel = {
+            let label = UILabel()
+            label.text = text
+            label.font = .systemFont(ofSize: 18, weight: .bold)
+            label.textColor = .white
+            return label
+        }()
         
         backgroundColor = UIColor(white: 1, alpha: 0.3)
         layer.masksToBounds = true
@@ -338,149 +345,3 @@ class PillView: UIView {
     }
 }
 
-// 반려동물 카드 VC
-final class PetCardViewController: UIViewController {
-    
-    // 배경 반투명 뷰
-   let dimView: UIView = {
-        let view = UIView()
-       view.backgroundColor = .black.withAlphaComponent(0.5)
-        return view
-    }()
-    
-    // 카드 콘텐츠 배경 뷰
-    private let cardView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        view.layer.cornerRadius = 15
-        view.clipsToBounds = true // 카드 밖으로 컨텐츠가 나갔을 때 카드 모양대로 자르기 위한 제한
-        
-        view.layer.borderWidth = 5
-        view.layer.borderColor = UIColor(red: 0.96, green: 0.73, blue: 0.23, alpha: 1.00).cgColor // HEX #f6b93b
-
-        return view
-    }()
-    
-    private let shadowView: UIView = {
-        let view = UIView()
-        view.layer.shadowColor = UIColor(red: 1.00, green: 0.98, blue: 0.40, alpha: 1.00).cgColor // HEX #fffa65
-        view.layer.shadowOpacity = 1
-        view.layer.shadowRadius = 10
-        view.layer.shadowOffset = .zero
-        return view
-    }()
-    
-    // 콘텐츠
-    private let content: UIView = {
-        let view = UIView()
-        view.backgroundColor = .clear
-        return view
-    }()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupLayout()
-        setContent()
-        setDismiss()
-    }
-    
-    func setupLayout() {
-        view.addSubview(dimView)
-        dimView.frame = view.bounds
-
-        view.addSubview(shadowView)
-        shadowView.translatesAutoresizingMaskIntoConstraints = false
-        
-        shadowView.addSubview(cardView)
-        cardView.translatesAutoresizingMaskIntoConstraints = false
-
-        NSLayoutConstraint.activate([
-            shadowView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            shadowView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            shadowView.widthAnchor.constraint(equalToConstant: 280),
-            
-            cardView.topAnchor.constraint(equalTo: shadowView.topAnchor),
-            cardView.bottomAnchor.constraint(equalTo: shadowView.bottomAnchor),
-            cardView.leadingAnchor.constraint(equalTo: shadowView.leadingAnchor),
-            cardView.trailingAnchor.constraint(equalTo: shadowView.trailingAnchor)
-        ])
-        // height는 콘텐츠 길이에 따라 가변
-    }
-
-    func setContent() {
-        setContentUI()
-        cardView.addSubview(content)
-        content.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            content.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 20),
-            content.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -20),
-            content.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 20),
-            content.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -20)
-            ])
-    }
-    
-    
-    func setContentUI() {
-        let img = UIImageView(image: .yerinPet)
-        
-        let name = MyLabel("짜코", size: 24, weight: .bold, color: .black)
-        let lv = MyLabel("Lv.1 크레스티드 게코", size: 19, weight: .medium, color: .black)
-        let fav: UIStackView = {
-            let title = MyLabel("좋아하는 것:", size: 19, weight: .bold, color: .black)
-            let ans = MyLabel("사료, 홍시", size: 19, weight: .medium, color: .black)
-            
-            let stackView = UIStackView(arrangedSubviews: [title, ans])
-            stackView.axis = .horizontal
-            stackView.spacing = 6
-            return stackView
-        }()
-        let hate: UIStackView = {
-            let title = MyLabel("싫어하는 것:", size: 19, weight: .bold, color: .black)
-            let ans = MyLabel("사람", size: 19, weight: .medium, color: .black)
-            
-            let stackView = UIStackView(arrangedSubviews: [title, ans])
-            stackView.axis = .horizontal
-            stackView.spacing = 6
-            return stackView
-        }()
-
-        let texts: UIStackView = {
-            let stackView = UIStackView(arrangedSubviews: [name, lv, fav, hate])
-            stackView.axis = .vertical
-            stackView.spacing = 10
-            stackView.alignment = .center
-            return stackView
-        }()
-        
-        content.addSubview(img)
-        content.addSubview(texts)
-        
-        img.translatesAutoresizingMaskIntoConstraints = false
-        img.contentMode = .scaleAspectFit
-        
-        texts.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            img.widthAnchor.constraint(equalToConstant: 150),
-            img.heightAnchor.constraint(equalToConstant: 180),
-            img.centerXAnchor.constraint(equalTo: content.centerXAnchor),
-            img.topAnchor.constraint(equalTo: content.topAnchor),
-            
-            texts.centerXAnchor.constraint(equalTo: content.centerXAnchor),
-            texts.topAnchor.constraint(equalTo: img.bottomAnchor),
-            texts.leadingAnchor.constraint(equalTo: content.leadingAnchor),
-            texts.trailingAnchor.constraint(equalTo: content.trailingAnchor),
-            texts.bottomAnchor.constraint(equalTo: content.bottomAnchor)
-        ])
-    }
-    
-    func setDismiss() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(close))
-        dimView.addGestureRecognizer(tap)
-    }
-    
-    @objc func close() {
-        dismiss(animated: true)
-    }
-}
