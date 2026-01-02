@@ -9,12 +9,12 @@ import UIKit
 
 // 반려동물 카드 VC
 final class PetCardViewController: UIViewController {
-    var isShadowPathSet = false
+    private var isShadowPathSet = false
     
     // 배경 반투명 뷰
    let dimView: UIView = {
         let view = UIView()
-       view.backgroundColor = .black.withAlphaComponent(0.5)
+        view.backgroundColor = .black.withAlphaComponent(0.5)
         return view
     }()
     

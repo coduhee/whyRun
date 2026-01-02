@@ -13,6 +13,8 @@ class YerinViewController: UIViewController {
     let profileImage = UIImageView(image: .yerinProfile)
     let petImage = UIImageView(image: .yerinPet)
     
+    var profileExpended = false
+    
     let mbtiLabel = UILabel()
     let nameLabel = UILabel()
     let levelLabel = UILabel()
@@ -44,7 +46,9 @@ class YerinViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
+        guard !profileExpended else { return }
         profileImage.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+        profileExpended = true
     }
     
     // 기초 UI 셋업
@@ -139,14 +143,21 @@ class YerinViewController: UIViewController {
         words.font = .systemFont(ofSize: 18, weight: .semibold)
         
         // 색상 설정
-        let buttonLabelColor = #colorLiteral(red: 0.968627451, green: 0.8392156863, blue: 0.5803921569, alpha: 1) // HEX #F7D694
-        
         [mbtiLabel, nameLabel, levelLabel, jobLabel, keywordLabel, styleLabel, wordLabel, words].forEach {
             $0.textColor = .white
         }
         [petLabel, blogLabel].forEach {
-            $0.textColor = buttonLabelColor
+            $0.textColor = #colorLiteral(red: 0.968627451, green: 0.8392156863, blue: 0.5803921569, alpha: 1) // HEX #F7D694
         }
+    }
+    
+    // stackView 생성
+    func stackView(_ views: [UIView], axis: NSLayoutConstraint.Axis, spacing: CGFloat = 10, alignment: UIStackView.Alignment) -> UIStackView {
+        let stack = UIStackView(arrangedSubviews: views)
+        stack.axis = axis
+        stack.spacing = spacing
+        stack.alignment = alignment
+        return stack
     }
     
     // 특징뷰(CharacterView) 설정
@@ -169,63 +180,28 @@ class YerinViewController: UIViewController {
     }
     
     func setCharcterStack() -> UIStackView {
-        let keywordStack = UIStackView(arrangedSubviews: keywords.map{ PillView($0) })
-        let styleStack = UIStackView(arrangedSubviews: styles.map{ PillView($0) })
+        let keywordStack = stackView(keywords.map { PillView($0) }, axis: .horizontal, spacing: 5, alignment: .center)
+        let styleStack = stackView(styles.map{ PillView($0) }, axis: .horizontal, spacing: 5, alignment: .center)
         
-        keywordStack.spacing = 5
-        styleStack.spacing = 5
+        let first = stackView([keywordLabel, keywordStack], axis: .vertical, spacing: 6, alignment: .trailing)
+        let second = stackView([styleLabel, styleStack], axis: .vertical, spacing: 6, alignment: .trailing)
+        let third = stackView([wordLabel, words], axis: .vertical, spacing: 6, alignment: .trailing)
         
-        let first = UIStackView(arrangedSubviews: [keywordLabel, keywordStack])
-        let second = UIStackView(arrangedSubviews: [styleLabel, styleStack])
-        let third = UIStackView(arrangedSubviews: [wordLabel, words])
-        
-        [first, second, third].forEach {
-            $0.axis = .vertical
-            $0.spacing = 6
-            $0.alignment = .trailing
-        }
-        
-        let stackView = UIStackView(arrangedSubviews: [first, second, third])
-        
-        stackView.axis = .vertical
-        stackView.spacing = 20
-        stackView.alignment = .trailing
-        
-        return stackView
+        return stackView([first, second, third], axis: .vertical, spacing: 20, alignment: .trailing)
     }
     
     // '나'에 관련된 레이블 스택뷰(myLabelSet) 생성
     func setMyLabelStack() -> UIStackView {
-        let descriptionLabel: UIStackView = {
-            let stackView = UIStackView(arrangedSubviews: [levelLabel, jobLabel])
-            stackView.axis = .horizontal
-            stackView.spacing = 10
-            return stackView
-        }()
-        
-        let stackView = UIStackView(arrangedSubviews: [mbtiLabel, nameLabel, descriptionLabel])
-        stackView.axis = .vertical
-        stackView.spacing = 6
-        stackView.alignment = .center
-        return stackView
+        let descriptionLabel = stackView([levelLabel, jobLabel], axis: .horizontal, alignment: .center)
+        return stackView([mbtiLabel, nameLabel, descriptionLabel], axis: .vertical, spacing: 6, alignment: .center)
     }
     
     // 버튼 스택뷰 생성
     func setButtonStack() -> UIStackView {
-        let petStack = UIStackView(arrangedSubviews: [petButton, petLabel])
-        let blogStack = UIStackView(arrangedSubviews: [blogButton, blogLabel])
+        let petStack = stackView([petButton, petLabel], axis: .vertical, spacing: 6, alignment: .center)
+        let blogStack = stackView([blogButton, blogLabel], axis: .vertical, spacing: 6, alignment: .center)
         
-        [petStack, blogStack].forEach {
-            $0.axis = .vertical
-            $0.spacing = 6
-            $0.alignment = .center
-        }
-        
-        let stackView = UIStackView(arrangedSubviews: [petStack, blogStack])
-        stackView.axis = .horizontal
-        stackView.spacing = 10
-        stackView.distribution = .fillEqually
-        return stackView
+        return stackView([petStack, blogStack], axis: .horizontal, alignment: .center)
     }
     
     // 버튼뷰 생성
@@ -331,6 +307,7 @@ class PillView: UIView {
         
         backgroundColor = UIColor(white: 1, alpha: 0.3)
         layer.masksToBounds = true
+        layer.cornerRadius = 15
         
         label.translatesAutoresizingMaskIntoConstraints = false
         addSubview(label)
@@ -344,8 +321,6 @@ class PillView: UIView {
             label.topAnchor.constraint(equalTo: topAnchor),
             label.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
-        
-        layer.cornerRadius = 15
     }
     
     required init?(coder: NSCoder) {
