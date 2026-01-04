@@ -11,24 +11,25 @@ import UIKit
 class MemberADetailViewController: UIViewController {
     
     // 상단 이미지 슬라이드 뷰
+
     private let scrollView = UIScrollView()
     private let imageStackView = UIStackView()
-    private let imageNames = ["profile1", "profile2", "profile3"]
+    // 이미지 파일을 UIImage로 바로 로드해 저장한 배열 (수정)
+    // .profile1은 Asset Catalog에 등록된 이미지를 UIImage로 바로 로드한 배열
+    private let images: [UIImage?] = [.profile1, .profile2, .profile3]
     
     // 버튼들을 가로로 묶을 스택뷰
     private let linkStackView = UIStackView()
     
     //  버튼 만드는 함수 만들기
     private func makeIconButton(
-        imageName: String,
+        image: UIImage?, // String 대신 UIImage?
         action: @escaping () -> Void
     ) -> UIButton {
-        
         let button = UIButton(type: .system)
-        
         button.setImage(
-            // 원본 이미지 색상 유지
-            UIImage(named: imageName)?.withRenderingMode(.alwaysOriginal),
+            // 원본 이미지 색상 유지, 바로 할당 가능
+            image?.withRenderingMode(.alwaysOriginal),
             for: .normal
         )
         
@@ -93,9 +94,9 @@ class MemberADetailViewController: UIViewController {
         ])
         
         // 배열 반복문으로 돌면서 사진 뷰 만들고 스택뷰에 가로로 붙임
-        for name in imageNames {
+        for image in images {
             let imageView = UIImageView()
-            imageView.image = UIImage(named: name)
+            imageView.image = image // 이미 UIImage 객체이므로 image바로 대입
             imageView.contentMode = .scaleAspectFill
             imageView.clipsToBounds = true
             
@@ -111,21 +112,21 @@ class MemberADetailViewController: UIViewController {
     private func setupLinkButtons() {
         
         // 함수 이용해 깃허브 버튼 만들기
-        let githubButton = makeIconButton(imageName: "githubLogo") {
+        let githubButton = makeIconButton(image: .githubLogo) {
             if let url = URL(string: "https://github.com/coduhee") {
                 UIApplication.shared.open(url)
             }
         }
         
         // 티스토리 버튼 만들기
-        let tistoryButton = makeIconButton(imageName: "tistoryLogo") {
+        let tistoryButton = makeIconButton(image: .tistoryLogo) {
             if let url = URL(string: "https://coduhee.tistory.com") {
                 UIApplication.shared.open(url)
             }
         }
         
         // 메일 버튼 만들기
-        let mailButton = makeIconButton(imageName: "mailLogo") {
+        let mailButton = makeIconButton(image: .mailLogo) {
             if let url = URL(string: "mailto:vdyjb@ewha.ac.kr") {
                 UIApplication.shared.open(url)
             }
