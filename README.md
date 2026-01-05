@@ -27,7 +27,6 @@ Swift와 UIKit을 사용하여 개발한 iOS 자기소개 애플리케이션입�
 - 자기소개 정보 표시
 - 기술 스택(사용 가능 언어/도구) 소개
 - 화면 전환(NavigationController 기반)
-- StackView를 활용한 UI 레이아웃 구성
 - iOS UI 컴포넌트(Label, Button 등) 사용
 
 ---
