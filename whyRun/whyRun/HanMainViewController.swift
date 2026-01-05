@@ -7,7 +7,7 @@
 
 import UIKit
 
-class PageHan: UIViewController {
+class HanMainViewController: UIViewController {
     
     // 대제목 폰트설정
     let headerAttribute: [NSAttributedString.Key: Any] =
@@ -33,12 +33,12 @@ class PageHan: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white //
-
+        
         let rootStackView = UIStackView()
         rootStackView.axis = .vertical
         rootStackView.distribution = .fill
         rootStackView.translatesAutoresizingMaskIntoConstraints = false
-
+        
         
         // 상단 해드라인 코드
         let topContainerView = UIView()
@@ -48,7 +48,7 @@ class PageHan: UIViewController {
         topContainerView.addSubview(vSteckViewHeadLine)
         rootStackView.addArrangedSubview(topContainerView)
         topContainerView.heightAnchor.constraint(equalToConstant: 330).isActive = true
-
+        
         
         // 하단 내용 코드
         let bottomContainerView = UIView()
@@ -65,7 +65,7 @@ class PageHan: UIViewController {
         contentView.addSubview(bottomcontentVstackView)
         view.addSubview(rootStackView)
         
-
+        
         // 위치 조정 코드
         NSLayoutConstraint.activate([
             // rootStackView
@@ -84,7 +84,7 @@ class PageHan: UIViewController {
             scrollView.bottomAnchor.constraint(equalTo: bottomContainerView.bottomAnchor),
             scrollView.leadingAnchor.constraint(equalTo: bottomContainerView.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: bottomContainerView.trailingAnchor),
-
+            
             // ContentView
             contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
@@ -96,30 +96,30 @@ class PageHan: UIViewController {
             bottomcontentVstackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             bottomcontentVstackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
-
-
+        
+        
     }
     
     
     
     // 해드라인 스택뷰 세팅 함수
     func setHeadLineView()->UIStackView{
-    
-    let headLineLabel  = setHeadlineLabel()
-    let mainImage = setMainImage()
-    
-    let vSteckViewHeadLine = UIStackView()
-    vSteckViewHeadLine.axis = .vertical
-    vSteckViewHeadLine.alignment = .center
-    vSteckViewHeadLine.spacing = 12
-    vSteckViewHeadLine.translatesAutoresizingMaskIntoConstraints = false
-    
-    vSteckViewHeadLine.addArrangedSubview(mainImage)
-    vSteckViewHeadLine.addArrangedSubview(headLineLabel)
-
-    return vSteckViewHeadLine
-    
-}
+        
+        let headLineLabel  = setHeadlineLabel()
+        let mainImage = setMainImage()
+        
+        let vSteckViewHeadLine = UIStackView()
+        vSteckViewHeadLine.axis = .vertical
+        vSteckViewHeadLine.alignment = .center
+        vSteckViewHeadLine.spacing = 12
+        vSteckViewHeadLine.translatesAutoresizingMaskIntoConstraints = false
+        
+        vSteckViewHeadLine.addArrangedSubview(mainImage)
+        vSteckViewHeadLine.addArrangedSubview(headLineLabel)
+        
+        return vSteckViewHeadLine
+        
+    }
     
     // 헤드라인 라벨 세팅 함수
     func setHeadlineLabel()->UILabel{
@@ -171,7 +171,7 @@ class PageHan: UIViewController {
         NSLayoutConstraint.activate([
             mainImage.widthAnchor.constraint(equalToConstant: 150),
             mainImage.heightAnchor.constraint(equalToConstant: 150)
-            ])
+        ])
         
         mainImage.image = .han
         return mainImage
@@ -192,7 +192,7 @@ class PageHan: UIViewController {
             attributes: headerAttribute,
         )
         contentHeaderLabel.textAlignment = .center
-
+        
         // 내용 헤더 컴포넌트 세팅
         let ProfileHeaderLabel = UILabel()
         ProfileHeaderLabel.attributedText = NSAttributedString(
@@ -200,7 +200,7 @@ class PageHan: UIViewController {
             attributes: headerAttribute,
         )
         ProfileHeaderLabel.textAlignment = .center
-
+        
         
         // 내용 컴포넌트 세팅
         let contentHStackView1 = UIStackView()
@@ -215,14 +215,14 @@ class PageHan: UIViewController {
         thirdUIview.translatesAutoresizingMaskIntoConstraints = false
         thirdUIview.backgroundColor = .white
         let infoView = setContenttoinfo()
-
-
+        
+        
         let eduAndWorkView = setContentToEduAndWork()
         let skillView = setContentToSkill()
         
         contentHStackView1.addArrangedSubview(eduAndWorkView)
         contentHStackView1.addArrangedSubview(skillView)
-
+        
         
         mainVSteckView.addArrangedSubview(contentHeaderLabel)
         mainVSteckView.addArrangedSubview(infoView)
@@ -231,12 +231,12 @@ class PageHan: UIViewController {
         
         mainVSteckView.setCustomSpacing(20, after: infoView)
         mainVSteckView.setCustomSpacing(20, after: ProfileHeaderLabel)
-
+        
         
         NSLayoutConstraint.activate([
             infoView.widthAnchor.constraint(equalTo: mainVSteckView.widthAnchor),
             contentHStackView1.widthAnchor.constraint(equalTo: mainVSteckView.widthAnchor)
-           // infoView.centerYAnchor.constraint(equalTo: mainVSteckView.centerYAnchor),
+            // infoView.centerYAnchor.constraint(equalTo: mainVSteckView.centerYAnchor),
         ])
         
         return mainVSteckView
@@ -279,10 +279,10 @@ class PageHan: UIViewController {
                 .foregroundColor: UIColor(red:107/255,green:121/255,blue:251/255,alpha:1)
             ]
         )
-
+        
         infoNameVStackView.addArrangedSubview(infoImageView)
         infoNameVStackView.addArrangedSubview(nameLabel)
-
+        
         
         /// 운용 사이트 배치
         let addressStackView = UIStackView()
@@ -292,7 +292,7 @@ class PageHan: UIViewController {
         addressStackView.distribution = .fillEqually
         //addressStackView.layoutMargins = UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0)
         addressStackView.isLayoutMarginsRelativeArrangement = true
-
+        
         let mbtiStackView = UIStackView()
         mbtiStackView.translatesAutoresizingMaskIntoConstraints = false
         mbtiStackView.axis = .horizontal
@@ -309,7 +309,7 @@ class PageHan: UIViewController {
         let velogTextView = CustomLinkTextView(text: "https://velog.io/@tyr_00", fontSize: 16)
         velogStackView.addArrangedSubview(velogimage)
         velogStackView.addArrangedSubview(velogTextView)
-
+        
         let gitStackView = UIStackView()
         gitStackView.translatesAutoresizingMaskIntoConstraints = false
         gitStackView.axis = .horizontal
@@ -343,23 +343,23 @@ class PageHan: UIViewController {
         introContentVstackView.addArrangedSubview(introheaderLabel)
         introContentVstackView.addArrangedSubview(introTextlabel)
         introContentVstackView.setCustomSpacing(6, after: introheaderLabel)
-
+        
         infoTotalVStackView.addArrangedSubview(introContentVstackView)
-
+        
         infoTotalVStackView.setCustomSpacing(5, after: infoCoreHStackView)
-
+        
         
         infoView.addSubview(infoTotalVStackView)
-
+        
         NSLayoutConstraint.activate([
             //infoNameVStackView.heightAnchor.constraint(equalTo:infoTotalHStackView.heightAnchor),
             infoNameVStackView.widthAnchor.constraint(equalToConstant:120),
-
+            
             infoCoreHStackView.centerXAnchor.constraint(equalTo: infoView.centerXAnchor),
             //infoCoreHStackView.centerYAnchor.constraint(equalTo: infoView.centerYAnchor),
             infoCoreHStackView.widthAnchor.constraint(equalTo: infoView.widthAnchor),
             infoCoreHStackView.heightAnchor.constraint(equalToConstant: 120),
-
+            
             
             infoCoreHStackView.topAnchor.constraint(equalTo:infoCoreHStackView.topAnchor, constant: 15),
             infoCoreHStackView.bottomAnchor.constraint(equalTo:infoCoreHStackView.bottomAnchor, constant: -15),
@@ -374,7 +374,7 @@ class PageHan: UIViewController {
     func setContentToEduAndWork()->UIView{
         let eduWorkView = UIView()
         eduWorkView.translatesAutoresizingMaskIntoConstraints = false
-
+        
         let eduWorkVStackView = UIStackView()
         eduWorkVStackView.translatesAutoresizingMaskIntoConstraints = false
         eduWorkVStackView.axis = .vertical
@@ -392,7 +392,7 @@ class PageHan: UIViewController {
         
         eduWorkVStackView.setCustomSpacing(20, after: eduContentLabel)
         eduWorkVStackView.setCustomSpacing(6, after: workLabel)
-
+        
         
         eduWorkView.addSubview(eduWorkVStackView)
         
@@ -411,7 +411,7 @@ class PageHan: UIViewController {
     func setContentToSkill()->UIView{
         let skillView = UIView()
         skillView.translatesAutoresizingMaskIntoConstraints = false
-
+        
         let skillVStackView = UIStackView()
         skillVStackView.translatesAutoresizingMaskIntoConstraints = false
         skillVStackView.axis = .vertical
@@ -421,8 +421,8 @@ class PageHan: UIViewController {
         
         let worScopeLabel = CustomLabel(text: "WORK SCOPE", align: .center, attribute: contentheaderAttribute)
         let workscopeLabel1 = CustomLabel(text: "• C# WinForms 기반 프론트엔드 개발\n• DevExpress UI 컴포넌트 활용 및 커스터마이징\n• 위성영상 시각화 및 데이터 연계 기능 구현 (GDAL)\n• GeoServer 연동을 통한 공간정보 서비스 활용\n• Swagger 기반 API 연계 및 데이터 처리", align: .center, attribute: contentAttribute)
-
-         
+        
+        
         skillVStackView.addArrangedSubview(skillLabel)
         skillVStackView.addArrangedSubview(skillContentLabel)
         skillVStackView.addArrangedSubview(worScopeLabel)
