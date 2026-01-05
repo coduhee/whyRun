@@ -65,12 +65,15 @@ class MainViewController: UIViewController {
         setPersonalButtons()
         
         let teamLabels = stackView([logoLabel, teamNameLabel, teamGoalLabel], axis: .vertical, spacing: 0)
+        teamLabels.alignment = .center
         
         let firstButtonStack = stackView([kjhButton, byrButton], axis: .horizontal)
         let secondButtonStack = stackView([jysButton, hjhButton], axis: .horizontal)
         
+//        firstButtonStack.distribution = .equalSpacing
+//        secondButtonStack.distribution = .equalSpacing
+        
         let buttonStack = stackView([firstButtonStack, secondButtonStack], axis: .vertical)
-        buttonStack.alignment = .fill
 
         view.addSubview(teamLabels)
         view.addSubview(scrollView)
@@ -95,8 +98,17 @@ class MainViewController: UIViewController {
             buttonStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             buttonStack.topAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 20),
             buttonStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
-            buttonStack.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -30),
+//            buttonStack.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -30),
+            
+            buttonStack.leadingAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),
+            buttonStack.trailingAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -15)
+            
         ])
+        
+//         버튼 높이 buttonStack과 동일화
+//        personalButtons.forEach {
+//            $0.widthAnchor.constraint(lessThanOrEqualTo: firstButtonStack.heightAnchor).isActive = true
+//        }
     }
 
     // 레이블 설정
@@ -169,7 +181,7 @@ class MainViewController: UIViewController {
         let stack = UIStackView(arrangedSubviews: views)
         stack.axis = axis
         stack.spacing = spacing
-        stack.alignment = .center
+        stack.alignment = .fill
         stack.distribution = .fillEqually
         return stack
     }
@@ -185,9 +197,10 @@ class MainViewController: UIViewController {
     // 각 vc로 이동
     @objc private func navigateTo(_ sender: UIButton) {
         guard let name = sender.currentTitle else { return }
-        let vc = persons.filter { $0.name == name }[0].vc
     
-        navigationController?.pushViewController(vc, animated: true)
+        if let person = persons.first(where: { $0.name == name}) {
+            navigationController?.pushViewController(person.vc, animated: true)
+        }
     }
 }
 
@@ -202,7 +215,7 @@ struct Person {
 // 원형 버튼
 class CircularButton: UIButton {
     
-    private var aspectConstraint: NSLayoutConstraint?
+    private var aspectConstraint: NSLayoutConstraint? // 변수 x
     
     init() {
         super.init(frame: .zero)
@@ -212,12 +225,13 @@ class CircularButton: UIButton {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+   
+    // 원 넓이 높이 동일화
     private func setConstraints() {
         translatesAutoresizingMaskIntoConstraints = false
-        aspectConstraint = heightAnchor.constraint(equalTo: widthAnchor)
-        aspectConstraint?.priority = .defaultHigh
-        aspectConstraint?.isActive = true
+        heightAnchor.constraint(equalTo: widthAnchor)
+            .priority = .required
+        heightAnchor.constraint(equalTo: widthAnchor).isActive = true
     }
     
     override func layoutSubviews() {
