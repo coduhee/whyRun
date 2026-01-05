@@ -35,10 +35,10 @@ class MainViewController: UIViewController {
     )
     lazy var persons = [kjh, byr, jys, hjh]
     
-    let kjhButton = UIButton()
-    let byrButton = UIButton()
-    let jysButton = UIButton()
-    let hjhButton = UIButton()
+    let kjhButton = CircularButton()
+    let byrButton = CircularButton()
+    let jysButton = CircularButton()
+    let hjhButton = CircularButton()
     lazy var personalButtons = [kjhButton, byrButton, jysButton, hjhButton]
     
     let logoLabel = UILabel()
@@ -53,11 +53,7 @@ class MainViewController: UIViewController {
         setUI()
         setButtonAction()
     }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        roundButton()
-    }
+
     //MARK: UI 설정
     // UI 셋업 설정
     func setUI() {
@@ -68,12 +64,12 @@ class MainViewController: UIViewController {
         setPersonalButtons()
         
         let teamLabels = stackView([logoLabel, teamNameLabel, teamGoalLabel], axis: .vertical, spacing: 0)
-        teamLabels.alignment = .center
         
         let firstButtonStack = stackView([kjhButton, byrButton], axis: .horizontal)
         let secondButtonStack = stackView([jysButton, hjhButton], axis: .horizontal)
         
         let buttonStack = stackView([firstButtonStack, secondButtonStack], axis: .vertical)
+        buttonStack.alignment = .fill
 
         view.addSubview(teamLabels)
         view.addSubview(scrollView)
@@ -172,7 +168,7 @@ class MainViewController: UIViewController {
         let stack = UIStackView(arrangedSubviews: views)
         stack.axis = axis
         stack.spacing = spacing
-        stack.alignment = .fill
+        stack.alignment = .center
         stack.distribution = .fillEqually
         return stack
     }
@@ -193,14 +189,6 @@ class MainViewController: UIViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    // 버튼 모양 설정
-    func roundButton() {
-        personalButtons.forEach {
-            let size = min($0.bounds.width, $0.bounds.height)
-            $0.layer.cornerRadius = size / 2
-            $0.clipsToBounds = true
-        }
-    }
 }
 
 //MARK: 커스텀 객체
@@ -209,6 +197,34 @@ struct Person {
     let vc: UIViewController
     let img: UIImage
     let color: UIColor
+}
+
+// 원형 버튼
+class CircularButton: UIButton {
+    
+    private var aspectConstraint: NSLayoutConstraint?
+    
+    init() {
+        super.init(frame: .zero)
+        setConstraints()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setConstraints() {
+        translatesAutoresizingMaskIntoConstraints = false
+        aspectConstraint = heightAnchor.constraint(equalTo: widthAnchor)
+        aspectConstraint?.priority = .defaultHigh
+        aspectConstraint?.isActive = true
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        layer.cornerRadius = min(bounds.height, bounds.width) / 2
+        clipsToBounds = true
+    }
 }
 
 // 이미지 리사이징
