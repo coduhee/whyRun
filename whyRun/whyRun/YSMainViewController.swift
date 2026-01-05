@@ -20,7 +20,7 @@ class YSMainViewController: UIViewController {
     }
     
     func setupBackGround() {
-        backgroundImageView.image = UIImage(named: "YS")
+        backgroundImageView.image = UIImage.YS
         backgroundImageView.contentMode = .scaleAspectFill
         backgroundImageView.clipsToBounds = true
         
@@ -36,7 +36,7 @@ class YSMainViewController: UIViewController {
     }
     
     func setupButton() {
-        showSheetButton.setImage(UIImage(named: "YSpointer"), for: .normal)
+        showSheetButton.setImage(UIImage.ySpointer, for: .normal)
         showSheetButton.addTarget(self, action: #selector(tapShowButton), for: .touchUpInside)
     }
     
