@@ -13,6 +13,8 @@ class YerinViewController: UIViewController {
     let profileImage = UIImageView(image: .yerinProfile)
     let petImage = UIImageView(image: .yerinPet)
     
+    var profileExpended = false
+    
     let mbtiLabel = UILabel()
     let nameLabel = UILabel()
     let levelLabel = UILabel()
@@ -42,15 +44,18 @@ class YerinViewController: UIViewController {
     //MARK: UI 설정
     // 프로필 이미지 크기 변경
     override func viewDidLayoutSubviews() {
-        profileImage.contentMode = .scaleAspectFit
+        super.viewDidLayoutSubviews()
+        
+        guard !profileExpended else { return }
         profileImage.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+        profileExpended = true
     }
     
     // 기초 UI 셋업
     func setUI() {
         setLabels()
         
-        view.backgroundColor = UIColor(red: 0.19, green: 0.22, blue: 0.32, alpha: 1.00) // HEX #303952
+        view.backgroundColor = #colorLiteral(red: 0.1882352941, green: 0.2235294118, blue: 0.3215686275, alpha: 1) // HEX #303952
         
         // 여백을 위한 레이아웃 가이드 설정
         let cutGuide = UILayoutGuide()
@@ -73,6 +78,8 @@ class YerinViewController: UIViewController {
         let myLabelSet = setMyLabelStack()
         let buttonView = setButtonView()
         let characterView = setCharacterView()
+        
+        profileImage.contentMode = .scaleAspectFit
         
         // 오토레이아웃 설정
         view.addSubview(profileImage)
@@ -136,14 +143,21 @@ class YerinViewController: UIViewController {
         words.font = .systemFont(ofSize: 18, weight: .semibold)
         
         // 색상 설정
-        let buttonLabelColor = UIColor(red: 0.97, green: 0.84, blue: 0.58, alpha: 1.00)
-        
         [mbtiLabel, nameLabel, levelLabel, jobLabel, keywordLabel, styleLabel, wordLabel, words].forEach {
             $0.textColor = .white
         }
         [petLabel, blogLabel].forEach {
-            $0.textColor = buttonLabelColor
+            $0.textColor = #colorLiteral(red: 0.968627451, green: 0.8392156863, blue: 0.5803921569, alpha: 1) // HEX #F7D694
         }
+    }
+    
+    // stackView 생성
+    func stackView(_ views: [UIView], axis: NSLayoutConstraint.Axis, spacing: CGFloat = 10, alignment: UIStackView.Alignment) -> UIStackView {
+        let stack = UIStackView(arrangedSubviews: views)
+        stack.axis = axis
+        stack.spacing = spacing
+        stack.alignment = alignment
+        return stack
     }
     
     // 특징뷰(CharacterView) 설정
@@ -166,63 +180,28 @@ class YerinViewController: UIViewController {
     }
     
     func setCharcterStack() -> UIStackView {
-        let keywordStack = UIStackView(arrangedSubviews: keywords.map{ PillView($0) })
-        let styleStack = UIStackView(arrangedSubviews: styles.map{ PillView($0) })
+        let keywordStack = stackView(keywords.map { PillView($0) }, axis: .horizontal, spacing: 5, alignment: .center)
+        let styleStack = stackView(styles.map{ PillView($0) }, axis: .horizontal, spacing: 5, alignment: .center)
         
-        keywordStack.spacing = 5
-        styleStack.spacing = 5
+        let first = stackView([keywordLabel, keywordStack], axis: .vertical, spacing: 6, alignment: .trailing)
+        let second = stackView([styleLabel, styleStack], axis: .vertical, spacing: 6, alignment: .trailing)
+        let third = stackView([wordLabel, words], axis: .vertical, spacing: 6, alignment: .trailing)
         
-        let first = UIStackView(arrangedSubviews: [keywordLabel, keywordStack])
-        let second = UIStackView(arrangedSubviews: [styleLabel, styleStack])
-        let third = UIStackView(arrangedSubviews: [wordLabel, words])
-        
-        [first, second, third].forEach {
-            $0.axis = .vertical
-            $0.spacing = 6
-            $0.alignment = .trailing
-        }
-        
-        let stackView = UIStackView(arrangedSubviews: [first, second, third])
-        
-        stackView.axis = .vertical
-        stackView.spacing = 20
-        stackView.alignment = .trailing
-        
-        return stackView
+        return stackView([first, second, third], axis: .vertical, spacing: 20, alignment: .trailing)
     }
     
     // '나'에 관련된 레이블 스택뷰(myLabelSet) 생성
     func setMyLabelStack() -> UIStackView {
-        let descriptionLabel: UIStackView = {
-            let stackView = UIStackView(arrangedSubviews: [levelLabel, jobLabel])
-            stackView.axis = .horizontal
-            stackView.spacing = 10
-            return stackView
-        }()
-        
-        let stackView = UIStackView(arrangedSubviews: [mbtiLabel, nameLabel, descriptionLabel])
-        stackView.axis = .vertical
-        stackView.spacing = 6
-        stackView.alignment = .center
-        return stackView
+        let descriptionLabel = stackView([levelLabel, jobLabel], axis: .horizontal, alignment: .center)
+        return stackView([mbtiLabel, nameLabel, descriptionLabel], axis: .vertical, spacing: 6, alignment: .center)
     }
     
     // 버튼 스택뷰 생성
     func setButtonStack() -> UIStackView {
-        let petStack = UIStackView(arrangedSubviews: [petButton, petLabel])
-        let blogStack = UIStackView(arrangedSubviews: [blogButton, blogLabel])
+        let petStack = stackView([petButton, petLabel], axis: .vertical, spacing: 6, alignment: .center)
+        let blogStack = stackView([blogButton, blogLabel], axis: .vertical, spacing: 6, alignment: .center)
         
-        [petStack, blogStack].forEach {
-            $0.axis = .vertical
-            $0.spacing = 6
-            $0.alignment = .center
-        }
-        
-        let stackView = UIStackView(arrangedSubviews: [petStack, blogStack])
-        stackView.axis = .horizontal
-        stackView.spacing = 10
-        stackView.distribution = .fillEqually
-        return stackView
+        return stackView([petStack, blogStack], axis: .horizontal, alignment: .center)
     }
     
     // 버튼뷰 생성
@@ -230,7 +209,7 @@ class YerinViewController: UIViewController {
         let buttonSet = setButtonStack()
         let view = UIView()
         
-        view.backgroundColor = UIColor(red: 0.18, green: 0.21, blue: 0.25, alpha: 1.00) // HEX #2f3640
+        view.backgroundColor = #colorLiteral(red: 0.1843137255, green: 0.2117647059, blue: 0.2509803922, alpha: 1) // HEX #2f3640
         view.layer.cornerRadius = 15
         
         view.addSubview(buttonSet)
@@ -253,23 +232,21 @@ class YerinViewController: UIViewController {
 extension YerinViewController {
     // 버튼 액션 설정
     func setButtonActions() {
-        blogButton.addTarget(self, action: #selector(blogButtonPushed), for: .touchUpInside)
-        petButton.addTarget(self, action: #selector(petButtonPushed), for: .touchUpInside)
-    }
-    
-    // 블로그 버튼 액션
-    @objc private func blogButtonPushed() {
-        let url = URL(string: "https://velog.io/@bambu113/posts")
-        let blogSafariView: SFSafariViewController = SFSafariViewController(url: url!)
-        self.present(blogSafariView, animated: true , completion: nil)
-    }
-    
-    // 펫 버튼 액션
-    @objc private func petButtonPushed() {
-        let vc = PetCardViewController()
-        vc.modalPresentationStyle = .overFullScreen
-        vc.modalTransitionStyle = .crossDissolve
-        present(vc, animated: true)
+        let blogAction = UIAction { _ in
+            let url = URL(string: "https://velog.io/@bambu113/posts")
+            let blogSafariView: SFSafariViewController = SFSafariViewController(url: url!)
+            self.present(blogSafariView, animated: true , completion: nil)
+        }
+        
+        let petAction = UIAction { _ in
+            let vc = PetCardViewController()
+            vc.modalPresentationStyle = .overFullScreen
+            vc.modalTransitionStyle = .crossDissolve
+            self.present(vc, animated: true)
+        }
+        
+        blogButton.addAction(blogAction, for: .touchUpInside)
+        petButton.addAction(petAction, for: .touchUpInside)
     }
 }
 
@@ -281,14 +258,15 @@ class IconButton: UIButton {
         
         clipsToBounds = false
         layer.cornerRadius = 15
-        backgroundColor = UIColor(red: 0.97, green: 0.84, blue: 0.58, alpha: 1.00) // HEX #F7D694
+        backgroundColor = #colorLiteral(red: 0.968627451, green: 0.8392156863, blue: 0.5803921569, alpha: 1) // HEX #F7D694
         
         // 테두리 및 그림자 설정
         layer.borderWidth = 3
-        layer.borderColor = UIColor(red: 0.96, green: 0.73, blue: 0.23, alpha: 1.00).cgColor // HEX #f6b93b
-        layer.shadowColor = UIColor(red: 1.00, green: 0.98, blue: 0.40, alpha: 1.00).cgColor // HEX #fffa65
-        layer.shadowOpacity = 1
+        layer.borderColor = #colorLiteral(red: 0.9647058824, green: 0.7254901961, blue: 0.231372549, alpha: 1) // HEX #f6b93b
+        layer.shadowColor = #colorLiteral(red: 1, green: 0.9803921569, blue: 0.3960784314, alpha: 1) // HEX #fffa65
+        layer.shadowOpacity = 0.8
         layer.shadowOffset = .zero
+        layer.shadowRadius = 4
         
         // 버튼 이미지 설정
         setImage(icon, for: .normal)
@@ -301,6 +279,12 @@ class IconButton: UIButton {
             heightAnchor.constraint(equalToConstant: 65),
             widthAnchor.constraint(equalToConstant: 65)
         ])
+    }
+    
+    // shadowPath 설정
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: layer.cornerRadius).cgPath
     }
     
     required init?(coder: NSCoder) {
@@ -323,6 +307,7 @@ class PillView: UIView {
         
         backgroundColor = UIColor(white: 1, alpha: 0.3)
         layer.masksToBounds = true
+        layer.cornerRadius = 15
         
         label.translatesAutoresizingMaskIntoConstraints = false
         addSubview(label)
@@ -336,8 +321,6 @@ class PillView: UIView {
             label.topAnchor.constraint(equalTo: topAnchor),
             label.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
-        
-        layer.cornerRadius = 15
     }
     
     required init?(coder: NSCoder) {

@@ -9,11 +9,12 @@ import UIKit
 
 // 반려동물 카드 VC
 final class PetCardViewController: UIViewController {
+    private var isShadowPathSet = false
     
     // 배경 반투명 뷰
    let dimView: UIView = {
         let view = UIView()
-       view.backgroundColor = .black.withAlphaComponent(0.5)
+        view.backgroundColor = .black.withAlphaComponent(0.5)
         return view
     }()
     
@@ -25,17 +26,18 @@ final class PetCardViewController: UIViewController {
         view.clipsToBounds = true // 카드 밖으로 컨텐츠가 나갔을 때 카드 모양대로 자르기 위한 제한
         
         view.layer.borderWidth = 5
-        view.layer.borderColor = UIColor(red: 0.96, green: 0.73, blue: 0.23, alpha: 1.00).cgColor // HEX #f6b93b
+        view.layer.borderColor = #colorLiteral(red: 0.9647058824, green: 0.7254901961, blue: 0.231372549, alpha: 1) // HEX #f6b93b
 
         return view
     }()
     
     private let shadowView: UIView = {
         let view = UIView()
-        view.layer.shadowColor = UIColor(red: 1.00, green: 0.98, blue: 0.40, alpha: 1.00).cgColor // HEX #fffa65
+        view.layer.shadowColor = #colorLiteral(red: 1, green: 0.9803921569, blue: 0.3960784314, alpha: 1) // HEX #fffa65
         view.layer.shadowOpacity = 1
         view.layer.shadowRadius = 10
         view.layer.shadowOffset = .zero
+        
         return view
     }()
     
@@ -52,6 +54,15 @@ final class PetCardViewController: UIViewController {
         setContent()
         setDismiss()
     }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        guard !isShadowPathSet else { return }
+        shadowView.layer.shadowPath = UIBezierPath(roundedRect: shadowView.bounds, cornerRadius: shadowView.layer.cornerRadius).cgPath
+        isShadowPathSet = true
+    }
+
     
     func setupLayout() {
         view.addSubview(dimView)
