@@ -9,16 +9,37 @@ import UIKit
 
 class MainViewController: UIViewController {
     
-    let kjh = Person(name: "👑김주희", vc: MemberADetailViewController(), img: UIImage(resource: .kjhAvatar), color: UIColor(red: 0.71, green: 0.58, blue: 0.98, alpha: 1.00))
-    let byr = Person(name: "변예린", vc: YerinViewController(), img: UIImage(resource: .byrAvatar), color: UIColor(red: 0.98, green: 0.91, blue: 0.50, alpha: 1.00))
-    let jys = Person(name: "장예슬", vc: YSMainViewController(), img: UIImage(resource: .jysAvatar), color: UIColor(red: 0.71, green: 0.71, blue: 0.75, alpha: 1.00))
-    let hjh = Person(name: "한주헌", vc: HanMainViewController(), img: UIImage(resource: .hjhAvatar), color: UIColor(red: 0.93, green: 0.59, blue: 0.98, alpha: 1.00))
+    let kjh = Person(
+        name: "👑김주희",
+        vc: MemberADetailViewController(),
+        img: .kjhAvatar,
+        color: #colorLiteral(red: 0.7098039216, green: 0.5764705882, blue: 0.9764705882, alpha: 1)
+    )
+    let byr = Person(
+        name: "변예린",
+        vc: YerinViewController(),
+        img: .byrAvatar,
+        color: #colorLiteral(red: 0.9887660146, green: 0.9171475768, blue: 0.5723444819, alpha: 1)
+    )
+    let jys = Person(
+        name: "장예슬",
+        vc: YSMainViewController(),
+        img: .jysAvatar,
+        color: #colorLiteral(red: 0.7574192286, green: 0.7619019747, blue: 0.794529736, alpha: 1)
+    )
+    let hjh = Person(
+        name: "한주헌",
+        vc: HanMainViewController(),
+        img: .hjhAvatar,
+        color: #colorLiteral(red: 0.9498060346, green: 0.6782237887, blue: 0.9848874211, alpha: 1)
+    )
+
     lazy var persons = [kjh, byr, jys, hjh]
     
-    let kjhButton = UIButton()
-    let byrButton = UIButton()
-    let jysButton = UIButton()
-    let hjhButton = UIButton()
+    let kjhButton = CircularButton()
+    let byrButton = CircularButton()
+    let jysButton = CircularButton()
+    let hjhButton = CircularButton()
     lazy var personalButtons = [kjhButton, byrButton, jysButton, hjhButton]
     
     let logoLabel = UILabel()
@@ -33,11 +54,7 @@ class MainViewController: UIViewController {
         setUI()
         setButtonAction()
     }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        roundButton()
-    }
+
     //MARK: UI 설정
     // UI 셋업 설정
     func setUI() {
@@ -48,12 +65,12 @@ class MainViewController: UIViewController {
         setPersonalButtons()
         
         let teamLabels = stackView([logoLabel, teamNameLabel, teamGoalLabel], axis: .vertical, spacing: 0)
-        teamLabels.alignment = .center
         
         let firstButtonStack = stackView([kjhButton, byrButton], axis: .horizontal)
         let secondButtonStack = stackView([jysButton, hjhButton], axis: .horizontal)
         
         let buttonStack = stackView([firstButtonStack, secondButtonStack], axis: .vertical)
+        buttonStack.alignment = .fill
 
         view.addSubview(teamLabels)
         view.addSubview(scrollView)
@@ -152,7 +169,7 @@ class MainViewController: UIViewController {
         let stack = UIStackView(arrangedSubviews: views)
         stack.axis = axis
         stack.spacing = spacing
-        stack.alignment = .fill
+        stack.alignment = .center
         stack.distribution = .fillEqually
         return stack
     }
@@ -172,15 +189,6 @@ class MainViewController: UIViewController {
     
         navigationController?.pushViewController(vc, animated: true)
     }
-    
-    // 버튼 모양 설정
-    func roundButton() {
-        personalButtons.forEach {
-            let size = min($0.bounds.width, $0.bounds.height)
-            $0.layer.cornerRadius = size / 2
-            $0.clipsToBounds = true
-        }
-    }
 }
 
 //MARK: 커스텀 객체
@@ -189,6 +197,34 @@ struct Person {
     let vc: UIViewController
     let img: UIImage
     let color: UIColor
+}
+
+// 원형 버튼
+class CircularButton: UIButton {
+    
+    private var aspectConstraint: NSLayoutConstraint?
+    
+    init() {
+        super.init(frame: .zero)
+        setConstraints()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setConstraints() {
+        translatesAutoresizingMaskIntoConstraints = false
+        aspectConstraint = heightAnchor.constraint(equalTo: widthAnchor)
+        aspectConstraint?.priority = .defaultHigh
+        aspectConstraint?.isActive = true
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        layer.cornerRadius = min(bounds.height, bounds.width) / 2
+        clipsToBounds = true
+    }
 }
 
 // 이미지 리사이징

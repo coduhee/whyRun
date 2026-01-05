@@ -486,7 +486,3 @@ func CustomLinkTextView(text:String, fontSize:CGFloat)->UITextView{
     return textView
 }
 
-#Preview
-{
-    PageHan()
-}
